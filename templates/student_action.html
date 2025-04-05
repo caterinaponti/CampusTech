@@ -1,90 +1,95 @@
-<!-- student_action.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Meal Portal</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f7fc;
-      padding: 20px;
-    }
-    .container {
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      max-width: 600px;
-      margin: auto;
-    }
-    h2, h3 {
-      color: #2c3e50;
-    }
-    .section {
-      margin-bottom: 25px;
-    }
-    label, p {
-      font-size: 1em;
-    }
-    input[type="checkbox"] {
-      margin-right: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 1em;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:disabled {
-      background-color: #ccc;
-    }
-    img {
-      width: 100%;
-      border-radius: 8px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Meal Action Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            background: white;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #4CAF50;
+        }
+
+        img {
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        .rules, .balance, .action {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .confirm-btn {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .confirm-btn:hover {
+            background-color: #45a049;
+        }
+
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Welcome, Student {{ student_id }}</h2>
+    <div class="container">
+        <h2>Welcome, {{ student_id }}</h2>
 
-    <div class="section">
-      <h3>Where You Should Be ({{ plan }} Plan)</h3>
-      <img src="{{ chart_image }}" alt="Meal Plan Chart">
+        <div class="rules">
+            <h3>Donation Rules</h3>
+            <ul>
+                <li>You may donate up to $50 per day</li>
+                <li>This equals 2 meals or 5 snacks max</li>
+            </ul>
+
+            <h3>Request Rules</h3>
+            <ul>
+                <li>Requests are first come, first serve</li>
+            </ul>
+        </div>
+
+        <div class="balance">
+            <p><strong>Your Current Flexi Balance:</strong> ${{ "%.2f"|format(balance) }}</p>
+            <p><strong>Plan Type:</strong> {{ plan }}</p>
+            <p><strong>Target Balance Range:</strong> ${{ lower_bound }} - ${{ upper_bound }}</p>
+
+            <img src="{{ chart_image }}" alt="Meal Plan Chart">
+        </div>
+
+        <form class="action" action="{{ url_for('student_action') }}" method="POST">
+            <input type="hidden" name="student_id" value="{{ student_id }}">
+            
+            <label><input type="radio" name="action" value="donate" required> I want to DONATE</label>
+            <label><input type="radio" name="action" value="request" required> I want to REQUEST</label>
+            
+            <button type="submit" class="confirm-btn">I Agree to the Rules & Continue</button>
+        </form>
     </div>
-
-    <div class="section">
-      <h3>Your Balance Info</h3>
-      <p><strong>Current Balance:</strong> ${{ balance }}</p>
-      <p><strong>Recommended Range:</strong> ${{ lower_bound }} – ${{ upper_bound }}</p>
-    </div>
-
-    <div class="section">
-      <h3>Rules</h3>
-      <p><strong>Donate:</strong> You can only donate up to $50 per day — equivalent to 2 meals or 5 snacks.</p>
-      <p><strong>Request:</strong> Requests are fulfilled on a first come, first serve basis.</p>
-    </div>
-
-    <form action="{{ url_for('confirm_action') }}" method="POST">
-      <input type="hidden" name="student_id" value="{{ student_id }}">
-
-      <div class="section">
-        <label><input type="checkbox" id="agree" required> I agree to the rules above</label>
-      </div>
-
-      <div class="section">
-        <h3>Would you like to:</h3>
-        <label><input type="radio" name="action" value="donate" required> Donate a meal</label><br>
-        <label><input type="radio" name="action" value="request" required> Request a meal</label>
-      </div>
-
-      <button type="submit">Submit</button>
-    </form>
-  </div>
 </body>
 </html>

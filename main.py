@@ -43,7 +43,7 @@ def student_action(username):
         try:
             with open('balances.txt', 'r') as file:
                 for line in file:
-                    parts = line.strip().split(', ')
+                    parts = line.strip().split(' ')
                     if parts[0] == student_id:
                         balance = parts[1]
                         building = parts[2]
@@ -64,7 +64,7 @@ def student_action(username):
 
     return render_template('student_action.html', username=username)
 
-@app.route('/donate/<username>/<student_id>')
+@app.route('/donate/<username>/<student_id>/<balance>/<building>')
 def donate(username, student_id, balance, building):
     '''
     studentBal = random number
@@ -110,8 +110,8 @@ def donate(username, student_id, balance, building):
     return render_template('donate.html', username=username, student_id=student_id)
  
 
-@app.route('/request/<username>/<student_id>')
-def request_page(username, student_id, building):
+@app.route('/request/<username>/<student_id>/<balance>/<building>')
+def request_page(username, student_id, balance, building):
     # check for the need of flexi 
     Toler_balance = 3010
     LME_balance = 2030

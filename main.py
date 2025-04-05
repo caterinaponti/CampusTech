@@ -93,7 +93,6 @@ def request_page(username, student_id):
         "December":250
     }
 
-    if()
 
 
     #create a queue

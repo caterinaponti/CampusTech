@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import datetime
 
 
@@ -117,47 +117,6 @@ def donate(username, student_id, balance, building):
 
     new_balance = float(balance) -  session['donation_total']
     return redirect(url_for('donation_success', donation_amount=donation_amount))
-
-
-
-    Toler_balance = 3010
-    LME_balance = 2030
-
-
-    # Toler_balance = 3010
-    # LME_balance = 2030
-
-
-    # Toler_balance_check = {
-    #     "January": Toler_balance,
-    #     "February": 2744,
-    #     "March":2060,
-    #     "April":1200,
-    #     "May":521,
-    #     "June":0,
-    #     "July":0,
-    #     "August":Toler_balance,
-    #     "September":2744,
-    #     "October": 2060,
-    #     "Novemeber":1200,
-    #     "December":521
-    # }
-
-    # LME_balance_check = {
-    #     "January": LME_balance,
-    #     "February": 1776,
-    #     "March":1269,
-    #     "April":762,
-    #     "May":250,
-    #     "June":0,
-    #     "July":0,
-    #     "August":LME_balance,
-    #     "September":1776,
-    #     "October": 1269,
-    #     "Novemeber":762,
-    #     "December":250
-    # }
-
     return render_template('donate.html', username=username, student_id=student_id, balance=balanace,building=building)
  
 

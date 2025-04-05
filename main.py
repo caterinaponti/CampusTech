@@ -168,13 +168,16 @@ def request_page(username, student_id, balance, building):
     # Check if student is eligible for request
     needs_flexi = current_balance < threshold
 
+    if needs_flexi == True:
+        #request meal/snack 
+
     #create a queue
 
-    
+
 
     #have a counter 7 dyas: max 3 requests a week
 
-    #request meal/snack 
+    
 
 
 

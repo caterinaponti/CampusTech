@@ -103,12 +103,17 @@ def donate(username, student_id, balance, building):
     if session['donation_total'] + donation_amount >= 50:
         error = "Donation limit reached. You cannot donate more than $50."     
         return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building,error=error)
-    else:
-        session['donation_total'] += donation_amount
-        new_balance = float(balance) -  session['donation_total']
-        return redirect(url_for('donation_success', donation_total=donation_total))
 
-    return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)
+
+
+    session['donation_total'] += donation_amount
+
+    #update the new balance
+
+    new_balance = float(balance) -  session['donation_total']
+    return redirect(url_for('donation_success', donation_amount=donation_amount))
+
+    return render_template('donate.html', username=username, student_id=student_id, balance=balanace,building=building)
  
 
 @app.route('/request/<username>/<student_id>/<balance>/<building>')

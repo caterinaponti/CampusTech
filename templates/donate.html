@@ -64,17 +64,14 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Welcome {{ username }}!</h2>
-        <p>Student ID: {{ student_id }}</p>
-        <h3>Make a Donation</h3>
-        <form method="POST">
-            <label for="amount">Donation Amount:</label>
-            <input type="number" name="amount" required placeholder="Enter amount in USD" min="1"><br><br>
+    <h2>Hi {{ username }}, student ID {{ student_id }}!</h2>
+    <p> Thanks for choosing to donate.</p>
+    <h2>Please chose what items you'd like to donate.</h2>
+    <button> $25 - Meal </button>
+    <button> $10 - Snack </button>
 
-            <button type="submit">Donate</button>
-        </form>
-        <p>If you'd like to go back, <a href="{{ url_for('student_action', username=username) }}">return to your actions</a>.</p>
-    </div>
+<!-- have buttons ? can't cap $50, one for meal one for $25 and each time clicked added to the amountDonated variable -->
+<!-- check if its $50 or more prevent it before it happens -->
 </body>
 </html>
+g

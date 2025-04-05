@@ -85,8 +85,7 @@
      <div class="rules-box">
         <h2> Donation Guidelines </h2>
         <ul>
-            <li> The max donation amount per day is $50 : 10 snacks or 5 meals </li>
-            <li> You can donate as many times a day as you'd like so long as you don't reach over $50 </li>
+            <li> The max donation amount per day is $50 : 5 snacks or 2 meals </li>
             <li> Press the button of your choice however many times you'd like to donate </li>
             <li> We'll keep track of your total! </li>
         </ul>
@@ -95,12 +94,13 @@
      <div class="container">
          <h3>Please select what you'd like to donate</h3>
          <form method="POST">
-           <button type=""submit" name="meal" value="25">$25 - Meal</button>
+           <button type="submit" name="meal" value="25">$25 - Meal</button>
            <p> </p> <!-- adding space between the twp buttons-->
-           <button type=""submit" name="snack" value="10">$10 - Snack</button>
+           <button type="submit" name="snack" value="10">$10 - Snack</button>
          </form>
          <p>If you'd like to go back, <a href="{{ url_for('student_action', username=username) }}">return to your actions</a>.</p>
      </div>
+     <h2> Amount Donated: $</h2>
 
     
     </script>
@@ -109,4 +109,3 @@
    
  </body>
  </html>
-g

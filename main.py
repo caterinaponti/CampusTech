@@ -8,16 +8,31 @@ USERNAME = "admin"
 PASSWORD = "password123"
 
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     error = None
     if request.method == 'POST':
         user = request.form['username']
         pw = request.form['password']
-        if user == USERNAME and pw == PASSWORD:
+
+        # Read stored credentials
+        try:
+            with open('users.txt', 'r') as file:
+                users = [line.strip().split(',') for line in file]
+        except FileNotFoundError:
+            users = []
+
+        # Check if user exists
+        if [user, pw] in users:
             return redirect(url_for('welcome', username=user))
         else:
-            error = 'Invalid credentials. Please try again.'
+            # Register new user
+            with open('users.txt', 'a') as file:
+                file.write(f'{user},{pw}\n')
+            return redirect(url_for('welcome', username=user))
+
     return render_template('login.html', error=error)
+
 
 
 @app.route('/welcome/<username>')

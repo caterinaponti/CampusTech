@@ -66,8 +66,29 @@
 <body>
     <div class="container">
         <h2>Welcome {{ username }}!</h2>
-        <p>Student ID: {{ student_id }}</p>
-        <h3>Request Assistance</h3>
+        <h4>Student ID: {{ student_id }}</h4>
+        <div class="rules-box">
+        </h2> Request Guidelines </h2>
+        <ul>
+            <li> The maximim requests per person is four times a week </li> 
+            <li> OPERATING ON A FIRST COME FIRST SERVE BASIS </li>
+            <li> When your request is processed, your flexi status will automatically be updated </li>
+            <li> A confirmation will be sent to your dons@usfca.edu email shortly! </li>
+        </ul>
+        </div>
+
+
+        <div class="container">
+            <h3> Please select a request </h3>
+            <form method="POST">
+                <button type=""submit" name="meal" value="25">$25 - Meal</button>
+                <p> </p> <!-- adding space between the twp buttons-->
+                <button type=""submit" name="snack" value="10">$10 - Snack</button>
+            </form>
+
+
+
+
         <form method="POST">
             <label for="request_details">Please provide your request details:</label><br>
             <textarea name="request_details" rows="4" required placeholder="Enter your request details here..."></textarea><br><br>

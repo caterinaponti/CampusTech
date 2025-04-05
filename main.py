@@ -65,12 +65,16 @@ def student_action(username):
 
     return render_template('student_action.html', username=username)
 
+<<<<<<< HEAD
 @app.route('/donation-success')
 def donation_success():
     donation_amount = request.arts.get('donation_amount', 0, type=int)
     return render_template('donation_success.html', donation_amount=donation_amount)
 
 @app.route('/donate/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
+=======
+@app.route('/donate/<username>/<student_id>/<balance>/<building>')
+>>>>>>> afa050a57e5288033f81c447cc630e6a51b7391f
 def donate(username, student_id, balance, building):
     '''
     studentBal = random number
@@ -79,8 +83,8 @@ def donate(username, student_id, balance, building):
     ## need the amount donating as a variable 
     # maybe make $10 and $25 final variables snack and meal 
     
-
     '''
+<<<<<<< HEAD
     if 'donation_total' not in session:
         session['donation_total'] = 0
 
@@ -112,6 +116,9 @@ def donate(username, student_id, balance, building):
 
     new_balance = float(balance) -  session['donation_total']
 
+=======
+    
+>>>>>>> afa050a57e5288033f81c447cc630e6a51b7391f
     Toler_balance = 3010
     LME_balance = 2030
 
@@ -204,18 +211,25 @@ def request_page(username, student_id, balance, building):
     # Check if student is eligible for request
     needs_flexi = current_balance < threshold
 
-    if needs_flexi == True:
+    
         #request meal/snack 
 
     #create a queue
+    queue_file = 'queue.txt'
+    success_message = None
 
+    queue_file = 'queue.txt'
+    success_message = None
 
+    if request.method == 'POST' and needs_flexi:
+        with open(queue_file, 'a') as f:
+            line = f"{username},{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+            f.write(line)
+        success_message = f"✅ {username}, you’ve been added to the queue! You will be notified soon of your meal/snack status."
 
-    #have a counter 7 dyas: max 3 requests a week
+    # TODO: give the meal or waiting
 
-    
-
-
+    # TODO: add a counter (max 3 requests per 7 days)
 
     return render_template(
         'request.html',
@@ -225,8 +239,10 @@ def request_page(username, student_id, balance, building):
         balance=current_balance,
         month=current_month,
         threshold=threshold,
-        eligible=needs_flexi
+        eligible=needs_flexi,
+        success_message=success_message  # <- don't forget this!
     )
+
 
 @app.route('/welcome/<username>')
 def welcome(username):

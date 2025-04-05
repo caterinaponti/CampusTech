@@ -100,29 +100,13 @@
         {% endif %}
 
         {% if eligible %}
-        <h3>Request Assistance</h3>
-        <form method="POST">
-            <label for="request_details">Please provide your request details:</label>
-            <textarea name="request_details" rows="4" required placeholder="Enter your request details here..."></textarea>
-            <button type="submit">Submit Request</button>
-        </form>
-        {% endif %}
-
-        {% if eligible %}
         {% if success_message %}
             <div class="status-message eligible">
                 {{ success_message }}
             </div>
         {% endif %}
 
-        <h3>Request Assistance</h3>
-        <form method="POST">
-            <label for="request_details">Please provide your request details:</label>
-            <textarea name="request_details" rows="4" required placeholder="Enter your request details here..."></textarea>
-            <button type="submit">Submit Request</button>
-        </form>
-        {% endif %}
-
+        
 
 
 

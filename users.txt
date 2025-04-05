@@ -108,5 +108,18 @@ aacheikh,xyXpDmBcO1
 lrfiguerres,fdsfsd
 lrfiguerres,j
 fdsfd,ds
+<<<<<<< Updated upstream
 aacheikh,exkppIC4s1
 aacheikh,http://127.0.0.1:5000
+=======
+lrfiguerres,43rewrwe
+lrfiguerres,frfsdgsdf
+amazed,amzing
+penis,boto
+808hoes,tapdawgs
+808,hoes
+boto,432423
+lrfiguerres,bitch
+fdsfd,ewwq
+da,fd
+>>>>>>> Stashed changes

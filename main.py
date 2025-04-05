@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 from datetime import datetime
 
+import secrets
+
 
 app = Flask(__name__)
+app.secret_key = '0ad399ba1c7e106f462428c079682c9c'
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -73,6 +76,7 @@ def donation_success():
     return render_template('donation_success.html', donation_amount=donation_amount)
 
 @app.route('/donate/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
+<<<<<<< Updated upstream
 
 @app.route('/donate/<username>/<student_id>/<balance>/<building>')
 
@@ -86,6 +90,9 @@ def donate(username, student_id, balance, building):
     
     '''
     
+=======
+def donate(username, student_id, balance, building):
+>>>>>>> Stashed changes
     if 'donation_total' not in session:
         session['donation_total'] = 0
     # might need snack and meal counts but idk
@@ -93,23 +100,38 @@ def donate(username, student_id, balance, building):
         session['meal_count'] = 0
     if 'snack_count' not in session:
         session['snack_count'] = 0
-
+    donation_amount = 0
     if request.method == 'POST':
-        donation_amount = 0
         if 'meal' in request.form:
             session['meal_count'] += 1
-            donation_amount += 25
+            if donation_amount + 25 <= 50:
+                session['donation_total'] += 25
+            else:
+                error = "Donation limit reached. You cannot donate more than $50."  
+            
         elif 'snack' in request.form:
             session['snack_count'] += 1
-            donation_amount += 10
+            if donation_amount + 10 <= 50:
+                session['donation_total'] += 10
+            else:
+                error = "Donation limit reached. You cannot donate more than $50."  
+        elif 'reset' in request.form:
+            session['donation_total'] = 0
 
-    # make sure donation limit doesn't exceed $50
-    if session['donation_total'] + donation_amount >= 50:
-        error = "Donation limit reached. You cannot donate more than $50."     
-        return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building,error=error)
+        elif 'finish' in request.form:
+            if session['donation_total'] + donation_amount >= 50:
+                error = "Donation limit reached. You cannot donate more than $50."     
+                return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building,error=error)
+            else:
+                session['donation_total'] += donation_amount
 
+             #update the new balance
 
+                new_balance = float(balance) -  session['donation_total']
+                return redirect(url_for('donation_success', donation_amount=donation_amount))
+    
 
+<<<<<<< Updated upstream
     session['donation_total'] += donation_amount
 
     #update the new balance
@@ -155,6 +177,9 @@ def donate(username, student_id, balance, building):
     #     "December":250
     # }
     return render_template('donate.html', username=username, student_id=student_id, balance=balanace,building=building)
+=======
+    return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)
+>>>>>>> Stashed changes
  
 
 @app.route('/request/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])

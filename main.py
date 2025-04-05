@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for
 from datetime import datetime
 
 
@@ -67,17 +67,15 @@ def student_action(username):
 
 @app.route('/donation-success')
 def donation_success():
-    donation_total = request.args.get('donation_total', 0, type=int)
-    meal_count = request.args.get('meal_count', 0, type=int)
-    snack_count = request.args.get('snack_count', 0, type=int)
-    return render_template('donation_success.html', donation_total=donation_total)
+    total_donation = request.arts.get('total_donation', 0, type=int)
+    meal_count = request.arts.get('meal_count', 0, type=int)
+    snack_count = request.arts.get('snack_count', 0, type=int)
+    return render_template('donation_success.html', donation_amount=donation_amount)
 
 @app.route('/donate/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
 
-
 @app.route('/donate/<username>/<student_id>/<balance>/<building>')
 
-@app.route('/donate/<username>/<student_id>/<balance>/<building>')
 def donate(username, student_id, balance, building):
     '''
     studentBal = random number
@@ -87,6 +85,7 @@ def donate(username, student_id, balance, building):
     # maybe make $10 and $25 final variables snack and meal 
     
     '''
+    
     if 'donation_total' not in session:
         session['donation_total'] = 0
     # might need snack and meal counts but idk
@@ -117,56 +116,72 @@ def donate(username, student_id, balance, building):
 
     new_balance = float(balance) -  session['donation_total']
     return redirect(url_for('donation_success', donation_amount=donation_amount))
+
+
+    Toler_balance = 3010
+    LME_balance = 2030
+
+    # Toler_balance = 3010
+    # LME_balance = 2030
+
+
+    # Toler_balance_check = {
+    #     "January": Toler_balance,
+    #     "February": 2744,
+    #     "March":2060,
+    #     "April":1200,
+    #     "May":521,
+    #     "June":0,
+    #     "July":0,
+    #     "August":Toler_balance,
+    #     "September":2744,
+    #     "October": 2060,
+    #     "Novemeber":1200,
+    #     "December":521
+    # }
+
+    # LME_balance_check = {
+    #     "January": LME_balance,
+    #     "February": 1776,
+    #     "March":1269,
+    #     "April":762,
+    #     "May":250,
+    #     "June":0,
+    #     "July":0,
+    #     "August":LME_balance,
+    #     "September":1776,
+    #     "October": 1269,
+    #     "Novemeber":762,
+    #     "December":250
+    # }
     return render_template('donate.html', username=username, student_id=student_id, balance=balanace,building=building)
  
 
-@app.route('/request/<username>/<student_id>/<balance>/<building>')
+@app.route('/request/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
 def request_page(username, student_id, balance, building):
-    # check for the need of flexi 
     Toler_balance = 3010
     LME_balance = 2030
 
     Toler_balance_check = {
-        "January": Toler_balance,
-        "February": 2744,
-        "March":2060,
-        "April":1200,
-        "May":521,
-        "June":0,
-        "July":0,
-        "August":Toler_balance,
-        "September":2744,
-        "October": 2060,
-        "Novemeber":1200,
-        "December":521
+        "January": Toler_balance, "February": 2744, "March": 2060,
+        "April": 1200, "May": 521, "June": 0, "July": 0,
+        "August": Toler_balance, "September": 2744, "October": 2060,
+        "Novemeber": 1200, "December": 521
     }
 
     LME_balance_check = {
-        "January": LME_balance,
-        "February": 1776,
-        "March":1269,
-        "April":762,
-        "May":250,
-        "June":0,
-        "July":0,
-        "August":LME_balance,
-        "September":1776,
-        "October": 1269,
-        "Novemeber":762,
-        "December":250
+        "January": LME_balance, "February": 1776, "March": 1269,
+        "April": 762, "May": 250, "June": 0, "July": 0,
+        "August": LME_balance, "September": 1776, "October": 1269,
+        "Novemeber": 762, "December": 250
     }
 
-    # Get current month
     current_month = datetime.now().strftime("%B")
-
-    # Convert balance from string to float
     try:
         current_balance = float(balance)
     except ValueError:
         return f"Invalid balance format for student {student_id}."
 
-
-     # Determine threshold and check eligibility
     if building == "Toler":
         threshold = Toler_balance_check.get(current_month, 0)
     elif building == "LME":
@@ -174,24 +189,39 @@ def request_page(username, student_id, balance, building):
     else:
         return f"Unknown building: {building}"
 
-    # Check if student is eligible for request
     needs_flexi = current_balance < threshold
-
-    
-    #request meal/snack 
-
     queue_file = 'queue.txt'
     success_message = None
+    error = None
 
     if request.method == 'POST' and needs_flexi:
+        request_type = None
+        amount = 0
+
+        if 'meal' in request.form:
+            request_type = 'meal'
+            amount = 25
+        elif 'snack' in request.form:
+            request_type = 'snack'
+            amount = 10
+        else:
+            error = "Please select an item to request."
+            return render_template(
+                'request.html',
+                username=username,
+                student_id=student_id,
+                building=building,
+                balance=current_balance,
+                month=current_month,
+                threshold=threshold,
+                eligible=needs_flexi,
+                error=error
+            )
+
         with open(queue_file, 'a') as f:
-            line = f"{username},{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
-            f.write(line)
-        success_message = f"✅ {username}, you’ve been added to the queue! You will be notified soon of your meal/snack status."
+            f.write(f"{username},{request_type},{amount},{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
 
-    # TODO: give the meal or waiting
-
-    # TODO: add a counter (max 3 requests per 7 days)
+        success_message = f"✅ {username}, your request for a ${amount} {request_type} was received and you're added to the queue."
 
     return render_template(
         'request.html',
@@ -202,9 +232,9 @@ def request_page(username, student_id, balance, building):
         month=current_month,
         threshold=threshold,
         eligible=needs_flexi,
-        success_message=success_message  # <- don't forget this!
+        success_message=success_message,
+        error=error
     )
-
 
 @app.route('/welcome/<username>')
 def welcome(username):

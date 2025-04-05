@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>What would you like to do?</title>
+</head>
+<body>
+    <h2>Welcome, {{ username }}!</h2>
+    <form method="POST">
+        <label for="student_id">Student ID:</label><br>
+        <input type="text" id="student_id" name="student_id" required><br><br>
+
+        <label>Choose an action:</label><br>
+        <input type="radio" id="donate" name="action" value="donate" required>
+        <label for="donate">Donate</label><br>
+        <input type="radio" id="request" name="action" value="request" required>
+        <label for="request">Request</label><br><br>
+
+        <button type="submit">Continue</button>
+    </form>
+</body>
+</html>

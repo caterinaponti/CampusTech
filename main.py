@@ -66,6 +66,7 @@ def student_action(username):
     return render_template('student_action.html', username=username)
 
 <<<<<<< HEAD
+
 @app.route('/donation-success')
 def donation_success():
     total_donation = request.arts.get('total_donation', 0, type=int)
@@ -75,8 +76,10 @@ def donation_success():
 
 @app.route('/donate/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
 =======
+
 @app.route('/donate/<username>/<student_id>/<balance>/<building>')
 >>>>>>> afa050a57e5288033f81c447cc630e6a51b7391f
+
 def donate(username, student_id, balance, building):
     '''
     studentBal = random number
@@ -87,6 +90,7 @@ def donate(username, student_id, balance, building):
     
     '''
 <<<<<<< HEAD
+
     if 'donation_total' not in session:
         session['donation_total'] = 0
     # might need snack and meal counts but idk
@@ -121,6 +125,7 @@ def donate(username, student_id, balance, building):
 =======
     
 >>>>>>> afa050a57e5288033f81c447cc630e6a51b7391f
+
     # Toler_balance = 3010
     # LME_balance = 2030
 

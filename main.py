@@ -67,7 +67,7 @@ def student_action(username):
 
     return render_template('student_action.html', username=username)
 
-@app.route('/donate/<username>/<student_id>/<balance>/<building>')
+@app.route('/donate/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
 def donate(username, student_id, balance, building):
     '''
     studentBal = random number
@@ -78,6 +78,15 @@ def donate(username, student_id, balance, building):
     
 
     '''
+    if request.method == 'POST':
+        donation_amount = 0
+        if 'meal' in request.form:
+            donation_amount = int(request.form['meal'])
+        elif 'snack':
+            
+    
+      
+
     Toler_balance = 3010
     LME_balance = 2030
 

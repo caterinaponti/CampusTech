@@ -65,18 +65,14 @@ def student_action(username):
 
     return render_template('student_action.html', username=username)
 
-<<<<<<< HEAD
 @app.route('/donation-success')
 def donation_success():
-    total_donation = request.arts.get('total_donation', 0, type=int)
-    meal_count = request.arts.get('meal_count', 0, type=int)
-    snack_count = request.arts.get('snack_count', 0, type=int)
-    return render_template('donation_success.html', donation_amount=donation_amount)
+    donation_total = request.args.get('donation_total', 0, type=int)
+    meal_count = request.args.get('meal_count', 0, type=int)
+    snack_count = request.args.get('snack_count', 0, type=int)
+    return render_template('donation_success.html', donation_total=donation_total)
 
 @app.route('/donate/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
-=======
-@app.route('/donate/<username>/<student_id>/<balance>/<building>')
->>>>>>> afa050a57e5288033f81c447cc630e6a51b7391f
 def donate(username, student_id, balance, building):
     '''
     studentBal = random number
@@ -86,7 +82,6 @@ def donate(username, student_id, balance, building):
     # maybe make $10 and $25 final variables snack and meal 
     
     '''
-<<<<<<< HEAD
     if 'donation_total' not in session:
         session['donation_total'] = 0
     # might need snack and meal counts but idk
@@ -108,52 +103,12 @@ def donate(username, student_id, balance, building):
     if session['donation_total'] + donation_amount >= 50:
         error = "Donation limit reached. You cannot donate more than $50."     
         return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building,error=error)
+    else:
+        session['donation_total'] += donation_amount
+        new_balance = float(balance) -  session['donation_total']
+        return redirect(url_for('donation_success', donation_total=donation_total))
 
-
-
-    session['donation_total'] += donation_amount
-
-    #update the new balance
-
-    new_balance = float(balance) -  session['donation_total']
-    return redirect(url_for('donation_success', donation_amount=donation_amount))
-
-=======
-    
->>>>>>> afa050a57e5288033f81c447cc630e6a51b7391f
-    # Toler_balance = 3010
-    # LME_balance = 2030
-
-    # Toler_balance_check = {
-    #     "January": Toler_balance,
-    #     "February": 2744,
-    #     "March":2060,
-    #     "April":1200,
-    #     "May":521,
-    #     "June":0,
-    #     "July":0,
-    #     "August":Toler_balance,
-    #     "September":2744,
-    #     "October": 2060,
-    #     "Novemeber":1200,
-    #     "December":521
-    # }
-
-    # LME_balance_check = {
-    #     "January": LME_balance,
-    #     "February": 1776,
-    #     "March":1269,
-    #     "April":762,
-    #     "May":250,
-    #     "June":0,
-    #     "July":0,
-    #     "August":LME_balance,
-    #     "September":1776,
-    #     "October": 1269,
-    #     "Novemeber":762,
-    #     "December":250
-    # }
-    return render_template('donate.html', username=username, student_id=student_id, balance=balanace,building=building)
+    return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)
  
 
 @app.route('/request/<username>/<student_id>/<balance>/<building>')

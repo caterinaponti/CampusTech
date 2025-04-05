@@ -31,19 +31,41 @@ def login():
 
 @app.route('/student-action/<username>', methods=['GET', 'POST'])
 def student_action(username):
+    balance = None
+    building = None
+    error = None
+
     if request.method == 'POST':
         student_id = request.form['student_id']
         action = request.form['action']
-        
+
+    # Read the balances.txt file and find the matching student ID
+        try:
+            with open('balances.txt', 'r') as file:
+                for line in file:
+                    parts = line.strip().split(', ')
+                    if parts[0] == student_id:
+                        balance = parts[1]
+                        building = parts[2]
+                        break
+                else:
+                    error = "Student ID not found."
+        except FileNotFoundError:
+            error = "balances.txt file not found."
+
+        if error:
+            return render_template('student_action.html', username=username, error=error)
+
+        # Redirect to corresponding page, passing the necessary data
         if action == 'donate':
-            return redirect(url_for('donate', username=username, student_id=student_id))
+            return redirect(url_for('donate', username=username, student_id=student_id, balance=balance, building=building))
         elif action == 'request':
-            return redirect(url_for('request_page', username=username, student_id=student_id))
+            return redirect(url_for('request_page', username=username, student_id=student_id, balance=balance, building=building))
 
     return render_template('student_action.html', username=username)
 
 @app.route('/donate/<username>/<student_id>')
-def donate(username, student_id):
+def donate(username, student_id, balance, building):
     '''
     studentBal = random number
     ## need student balance as a variable
@@ -53,12 +75,43 @@ def donate(username, student_id):
     
 
     '''
+    Toler_balance = 3010
+    LME_balance = 2030
 
+    Toler_balance_check = {
+        "January": Toler_balance,
+        "February": 2744,
+        "March":2060,
+        "April":1200,
+        "May":521,
+        "June":0,
+        "July":0,
+        "August":Toler_balance,
+        "September":2744,
+        "October": 2060,
+        "Novemeber":1200,
+        "December":521
+    }
+
+    LME_balance_check = {
+        "January": LME_balance,
+        "February": 1776,
+        "March":1269,
+        "April":762,
+        "May":250,
+        "June":0,
+        "July":0,
+        "August":LME_balance,
+        "September":1776,
+        "October": 1269,
+        "Novemeber":762,
+        "December":250
+    }
     return render_template('donate.html', username=username, student_id=student_id)
  
 
 @app.route('/request/<username>/<student_id>')
-def request_page(username, student_id):
+def request_page(username, student_id, building):
     # check for the need of flexi 
     Toler_balance = 3010
     LME_balance = 2030

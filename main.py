@@ -76,12 +76,21 @@ def donate(username, student_id, balance, building):
     
 
     '''
+    if 'donation_total' not in session:
+        session['donation_total'] = 0
+
+
     if request.method == 'POST':
         donation_amount = 0
         if 'meal' in request.form:
-            donation_amount = int(request.form['meal'])
-        elif 'snack':
-            
+            donation_amount += int(request.form['meal'])
+        elif 'snack' in request.form:
+            donation_amount += int(request.form['snack'])
+
+    # make sure donation limit doesn't exceed $50
+    if session['donation_total'] + donation_amount > 50:
+        error = "Donation limit reached. You cannot donate more than $50."     
+        return render_template('donate.html', username=username,)
     
       
 

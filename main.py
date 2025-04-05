@@ -65,7 +65,7 @@ def student_action(username):
 
     return render_template('student_action.html', username=username)
 
-@app.route('/donate/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
+@app.route('/donate/<username>/<student_id>/<balance>/<building>')
 def donate(username, student_id, balance, building):
     '''
     studentBal = random number
@@ -74,26 +74,8 @@ def donate(username, student_id, balance, building):
     ## need the amount donating as a variable 
     # maybe make $10 and $25 final variables snack and meal 
     
-
     '''
-    if 'donation_total' not in session:
-        session['donation_total'] = 0
-
-
-    if request.method == 'POST':
-        donation_amount = 0
-        if 'meal' in request.form:
-            donation_amount += int(request.form['meal'])
-        elif 'snack' in request.form:
-            donation_amount += int(request.form['snack'])
-
-    # make sure donation limit doesn't exceed $50
-    if session['donation_total'] + donation_amount > 50:
-        error = "Donation limit reached. You cannot donate more than $50."     
-        return render_template('donate.html', username=username,)
     
-      
-
     Toler_balance = 3010
     LME_balance = 2030
 
@@ -186,18 +168,25 @@ def request_page(username, student_id, balance, building):
     # Check if student is eligible for request
     needs_flexi = current_balance < threshold
 
-    if needs_flexi == True:
+    
         #request meal/snack 
 
     #create a queue
+    queue_file = 'queue.txt'
+    success_message = None
 
+    queue_file = 'queue.txt'
+    success_message = None
 
+    if request.method == 'POST' and needs_flexi:
+        with open(queue_file, 'a') as f:
+            line = f"{username},{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+            f.write(line)
+        success_message = f"✅ {username}, you’ve been added to the queue! You will be notified soon of your meal/snack status."
 
-    #have a counter 7 dyas: max 3 requests a week
+    # TODO: give the meal or waiting
 
-    
-
-
+    # TODO: add a counter (max 3 requests per 7 days)
 
     return render_template(
         'request.html',
@@ -207,8 +196,10 @@ def request_page(username, student_id, balance, building):
         balance=current_balance,
         month=current_month,
         threshold=threshold,
-        eligible=needs_flexi
+        eligible=needs_flexi,
+        success_message=success_message  # <- don't forget this!
     )
+
 
 @app.route('/welcome/<username>')
 def welcome(username):

@@ -65,6 +65,11 @@ def student_action(username):
 
     return render_template('student_action.html', username=username)
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+>>>>>>> 1c8bce5119c182256f77901888cd3562dfe61917
 @app.route('/donation-success')
 def donation_success():
     total_donation = request.arts.get('total_donation', 0, type=int)
@@ -73,8 +78,15 @@ def donation_success():
     return render_template('donation_success.html', donation_amount=donation_amount)
 
 @app.route('/donate/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
+<<<<<<< HEAD
 
 @app.route('/donate/<username>/<student_id>/<balance>/<building>')
+=======
+=======
+
+@app.route('/donate/<username>/<student_id>/<balance>/<building>')
+>>>>>>> afa050a57e5288033f81c447cc630e6a51b7391f
+>>>>>>> 1c8bce5119c182256f77901888cd3562dfe61917
 
 def donate(username, student_id, balance, building):
     '''
@@ -85,6 +97,10 @@ def donate(username, student_id, balance, building):
     # maybe make $10 and $25 final variables snack and meal 
     
     '''
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 1c8bce5119c182256f77901888cd3562dfe61917
 
     if 'donation_total' not in session:
         session['donation_total'] = 0
@@ -125,6 +141,7 @@ def donate(username, student_id, balance, building):
 =======
     
 >>>>>>> afa050a57e5288033f81c447cc630e6a51b7391f
+
     # Toler_balance = 3010
     # LME_balance = 2030
 >>>>>>> 467ab8e138440784bd6ab99a60d8c20049ddef30

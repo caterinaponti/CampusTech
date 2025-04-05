@@ -97,22 +97,8 @@ ocarter,1biIE6ZXUJ
 kmorgan,KeWyc0gTf2
 aking,lXgulk9nUZ
 qdouglas,T3xPoo6uJL
-sjohnson,LI30N1rttccponti,wallflower05
-<<<<<<< HEAD
-<<<<<<< HEAD
-king,http://127.0.0.1:5000
-=======
+sjohnson,LI30N1rttccponti
 cponti,wallflower05
->>>>>>> 7bb23972c15ca9e65d26d383acb7285dc9e010ce
-=======
-<<<<<<< Updated upstream
-=======
-king,http://127.0.0.1:5000
-<<<<<<< HEAD
 helloUser,thisisaFacePassword
 Tester!!!,HappyHappy
-=======
 cponti,wallflower05
->>>>>>> Stashed changes
->>>>>>> 0dc2128c4defd230c81377ee6b627c6bb355584a
->>>>>>> ff70b760e738cfed023a4574562d13c3a9119477

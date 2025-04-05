@@ -1,22 +1,97 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Next Step</title>
-</head>
-<body>
-    <h2>Welcome {{ username }}!</h2>
-    <p>Please enter your Student ID and select donation or request:</p>
 
-    <form method="POST">
-        <label for="student_id">Student ID:</label><br>
-        <input type="text" name="student_id" required><br><br>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Next Step - User Action</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f7fc;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+            .container {
+                background-color: #fff;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                max-width: 400px;
+                text-align: center;
+            }
+            h2 {
+                color: #4CAF50;
+            }
+            label {
+                font-size: 1.1em;
+                margin-bottom: 10px;
+                display: block;
+            }
+            input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                margin: 8px 0 20px 0;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 1em;
+            }
+            input[type="radio"] {
+                margin-right: 10px;
+            }
+            button {
+                width: 100%;
+                padding: 12px;
+                background-color: #4CAF50;
+                border: none;
+                border-radius: 4px;
+                color: white;
+                font-size: 1.1em;
+                cursor: pointer;
+            }
+            button:hover {
+                background-color: #45a049;
+            }
+            .error {
+                color: red;
+                margin-bottom: 20px;
+            }
+            p {
+                font-size: 0.9em;
+                color: #555;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Welcome {{ username }}!</h2>
+            <p>Please enter your Student ID and select what you'd like to do:</p>
 
-        <input type="radio" name="action" value="donate" required> I want to donate<br>
-        <input type="radio" name="action" value="request" required> I want to request<br><br>
 
-        <button type="submit">Continue</button>
-    </form>
-</body>
+            <!-- Updated action URL to match Flask route -->
+            <form action="{{ url_for('student_action', username=username) }}" method="POST">
+                <label for="student_id">Student ID:</label><br>
+                <input type="text" id="student_id" name="student_id" required><br><br>
+
+                <label for="donate">
+                    <input type="radio" id="donate" name="action" value="donate" required>
+                    I want to donate
+                </label><br>
+
+                <label for="request">
+                    <input type="radio" id="request" name="action" value="request" required>
+                    I want to request
+                </label><br><br>
+
+                <button type="submit">Continue</button>
+            </form>
+        </div>
+    </body>
 </html>
 
 

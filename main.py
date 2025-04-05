@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from checkpw import is_strong_password, generate_default_password
 
 app = Flask(__name__)
 
@@ -20,11 +21,18 @@ def login():
         # Check if user exists
         if [user, pw] in users:
             return redirect(url_for('student_action', username=user))
+
+        if not is_strong_password(user, pw):
+            # You can either reject the password or auto-generate a strong one
+            generated_pw = generate_default_password(user)
+            with open('users.txt', 'a') as file:
+                file.write(f'{user},{generated_pw}\n')
+            return render_template('login.html', error=f"Weak password. A new strong password has been created for you: {generated_pw}")
         else:
-            # Register new user
             with open('users.txt', 'a') as file:
                 file.write(f'{user},{pw}\n')
             return redirect(url_for('student_action', username=user))
+
 
     return render_template('login.html', error=error)
 

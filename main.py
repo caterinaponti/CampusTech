@@ -12,6 +12,8 @@ def login():
         user = request.form['username']
         pw = request.form['password']
 
+        #hello 
+
         # Read stored credentials
         try:
             with open('users.txt', 'r') as file:

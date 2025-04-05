@@ -147,6 +147,27 @@ def request_page(username, student_id, balance, building):
         "December":250
     }
 
+    # Get current month
+    current_month = datetime.now().strftime("%B")
+
+    # Convert balance from string to float
+    try:
+        current_balance = float(balance)
+    except ValueError:
+        return f"Invalid balance format for student {student_id}."
+
+
+     # Determine threshold and check eligibility
+    if building == "Toler":
+        threshold = Toler_balance_check.get(current_month, 0)
+    elif building == "LME":
+        threshold = LME_balance_check.get(current_month, 0)
+    else:
+        return f"Unknown building: {building}"
+
+    # Check if student is eligible for request
+    needs_flexi = current_balance < threshold
+
 
 
     #create a queue
@@ -157,7 +178,16 @@ def request_page(username, student_id, balance, building):
 
 
 
-    return render_template('request.html', username=username, student_id=student_id)
+    return render_template(
+        'request.html',
+        username=username,
+        student_id=student_id,
+        building=building,
+        balance=current_balance,
+        month=current_month,
+        threshold=threshold,
+        eligible=needs_flexi
+    )
 
 @app.route('/welcome/<username>')
 def welcome(username):

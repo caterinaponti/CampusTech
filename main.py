@@ -43,6 +43,16 @@ def student_action(username):
 
 @app.route('/donate/<username>/<student_id>')
 def donate(username, student_id):
+    '''
+    studentBal = random number
+    ## need student balance as a variable
+    ## need the student balance - amount they're donating as a variable
+    ## need the amount donating as a variable 
+    # maybe make $10 and $25 final variables snack and meal 
+    
+
+    '''
+
     return render_template('donate.html', username=username, student_id=student_id)
 
 @app.route('/request/<username>/<student_id>')

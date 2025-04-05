@@ -77,6 +77,7 @@ def donation_success():
 
 @app.route('/donate/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 @app.route('/donate/<username>/<student_id>/<balance>/<building>')
 
@@ -90,6 +91,9 @@ def donate(username, student_id, balance, building):
     
     '''
     
+=======
+def donate(username, student_id, balance, building):
+>>>>>>> Stashed changes
 =======
 def donate(username, student_id, balance, building):
 >>>>>>> Stashed changes
@@ -131,6 +135,7 @@ def donate(username, student_id, balance, building):
                 return redirect(url_for('donation_success', donation_amount=donation_amount))
     
 
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     session['donation_total'] += donation_amount
 
@@ -177,6 +182,9 @@ def donate(username, student_id, balance, building):
     #     "December":250
     # }
     return render_template('donate.html', username=username, student_id=student_id, balance=balanace,building=building)
+=======
+    return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)
+>>>>>>> Stashed changes
 =======
     return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)
 >>>>>>> Stashed changes

@@ -109,9 +109,12 @@ lrfiguerres,fdsfsd
 lrfiguerres,j
 fdsfd,ds
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 aacheikh,exkppIC4s1
 aacheikh,http://127.0.0.1:5000
 =======
+=======
+>>>>>>> Stashed changes
 lrfiguerres,43rewrwe
 lrfiguerres,frfsdgsdf
 amazed,amzing
@@ -122,4 +125,7 @@ boto,432423
 lrfiguerres,bitch
 fdsfd,ewwq
 da,fd
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

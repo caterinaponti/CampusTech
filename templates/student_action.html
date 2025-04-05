@@ -23,7 +23,7 @@
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       width: 100%;
-      max-width: 500px;
+      max-width: 600px;
       text-align: center;
     }
 
@@ -69,13 +69,6 @@
       color: #333;
     }
 
-    .rules p,
-    .balance-info p,
-    .items p {
-      font-size: 0.95em;
-      margin: 5px 0;
-    }
-
     .chart-placeholder {
       background-color: #e6f0fa;
       height: 150px;
@@ -86,52 +79,70 @@
       margin: 10px 0;
       color: #666;
     }
+
+    #balance-section,
+    #action-section {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Welcome {{ username }}!</h2>
-    <p>Please enter your Student ID and select what you'd like to do:</p>
 
-    <form action="{{ url_for('student_action', username=username) }}" method="POST">
-      <label for="student_id">Student ID:</label>
+    <!-- Student ID -->
+    <form id="mainForm" action="{{ url_for('student_action', username=username) }}" method="POST">
+      <label for="student_id">Enter your Student ID:</label>
       <input type="text" id="student_id" name="student_id" required />
 
-      <label>
-        <input type="radio" name="action" value="donate" required />
-        I want to donate
-      </label>
-
-      <label>
-        <input type="radio" name="action" value="request" required />
-        I want to request
-      </label>
-
-      <button type="submit">Continue</button>
-    </form>
-
-    <div class="section rules">
-      <h3>Rules</h3>
-      <p><strong>Rules for becoming a Flexi Fairy (Donating):</strong> Max $50 per day: 2 meals or 5 snacks.</p>
-      <p><strong>Rules for Requesting a wishful meal:</strong> First come, first serve.</p>
-      <p><strong>You can only request a meal/snack 3 times a week!</p>
-    </div>
-
-    <div class="section balance-info">
-      <h3>Your Flexi Balance</h3>
-      <p>Current Balance: <strong>${{ current_balance }}</strong></p>
-      <p>Recommended Range: ${{ lower_bound }} – ${{ upper_bound }}</p>
-
-      <div class="chart-placeholder">
-        [Balance Chart Placeholder – e.g., Focus Graph]
+      <!-- Rules Section -->
+      <div class="section rules">
+        <h3>Rules</h3>
+        <p><strong>Rules for becoming a Flexi Fairy-Donating:</strong> Max $50 per day: Up to 2 meals or 5 snacks. </p>
+        <p><strong>Rules for Requesting a wishful meal:</strong> First come, first serve. Meals are not always guaranteed.</p>
+         <p><strong>You can only request a meal/snack 3 times a week!</p>
       </div>
-    </div>
 
-    <div class="section items">
-      <h3>What You Can Donate or Request</h3>
-      <p>🟢 Meals (worth $25 each)</p>
-      <p>🟢 Snacks (worth $10 each)</p>
-    </div>
+      <!-- Chart Graphic Placeholder -->
+      <div class="section">
+        <h3>Where You Should Be</h3>
+        <div class="chart-placeholder">
+          [Balance Chart Placeholder – e.g., Goal vs. Actual]
+        </div>
+      </div>
+
+      <!-- Agree to Rules -->
+      <button type="button" onclick="showBalanceSection()">I Agree to the Rules Above</button>
+
+      <!-- Balance Section (Initially Hidden) -->
+      <div id="balance-section" class="section balance-info">
+        <h3>Your Flexi Info</h3>
+        <p><strong>Current Balance:</strong> ${{ current_balance }}</p>
+        <p><strong>Recommended Range (based on meal plan):</strong> ${{ lower_bound }} – ${{ upper_bound }}</p>
+      </div>
+
+      <!-- Action Buttons (Initially Hidden) -->
+      <div id="action-section" class="section">
+        <h3>What would you like to do?</h3>
+        <label>
+          <input type="radio" name="action" value="donate" required />
+          I want to donate
+        </label><br>
+        <label>
+          <input type="radio" name="action" value="request" required />
+          I want to request
+        </label>
+
+        <button type="submit">Continue</button>
+      </div>
+    </form>
   </div>
+
+  <script>
+    function showBalanceSection() {
+      document.getElementById("balance-section").style.display = "block";
+      document.getElementById("action-section").style.display = "block";
+    }
+  </script>
 </body>
 </html>

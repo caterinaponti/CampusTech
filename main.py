@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 
+
 app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
@@ -54,9 +55,20 @@ def donate(username, student_id):
     '''
 
     return render_template('donate.html', username=username, student_id=student_id)
+ 
 
 @app.route('/request/<username>/<student_id>')
 def request_page(username, student_id):
+    # check for the need of flexi 
+
+    #create a queue
+
+    #have a counter 7 dyas: max 3 requests a week
+
+    #request meal/snack 
+
+
+
     return render_template('request.html', username=username, student_id=student_id)
 
 @app.route('/welcome/<username>')
@@ -65,3 +77,5 @@ def welcome(username):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+

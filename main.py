@@ -65,7 +65,15 @@ def student_action(username):
 
     return render_template('student_action.html', username=username)
 
+@app.route('/donation-success')
+def donation_success():
+    donation_amount = request.arts.get('donation_amount', 0, type=int)
+    return render_template('donation_success.html', donation_amount=donation_amount)
+
+@app.route('/donate/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
+
 @app.route('/donate/<username>/<student_id>/<balance>/<building>')
+
 def donate(username, student_id, balance, building):
     '''
     studentBal = random number
@@ -75,7 +83,39 @@ def donate(username, student_id, balance, building):
     # maybe make $10 and $25 final variables snack and meal 
     
     '''
-    
+
+    if 'donation_total' not in session:
+        session['donation_total'] = 0
+
+    # might need snack and meal counts but idk
+    if 'meal_count' not in session:
+        session['meal_count'] = 0
+    if 'snack_count' not in session:
+        session['snack_count'] = 0
+
+    if request.method == 'POST':
+        donation_amount = 0
+        if 'meal' in request.form:
+            session['meal_count'] += 1
+            donation_amount += 25
+        elif 'snack' in request.form:
+            session['snack_count'] += 1
+            donation_amount += 10
+
+    # make sure donation limit doesn't exceed $50
+    if session['donation_total'] + donation_amount >= 50:
+        error = "Donation limit reached. You cannot donate more than $50."     
+        return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building,error=error)
+    else: #successfully able to donate
+        return redirect(url_for('donation_success', donation_amount=donation_amount))
+
+    session['donation_total'] += donation_amount
+
+    #update the new balance
+
+    new_balance = float(balance) -  session['donation_total']
+
+
     Toler_balance = 3010
     LME_balance = 2030
 

@@ -79,19 +79,37 @@
             text-decoration: underline;
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <h2>Welcome {{ username }}!</h2>
-        <p>Student ID: {{ student_id }}</p>
-        <h3>Request Assistance</h3>
-        <form method="POST">
-            <label for="request_details">Please provide your request details:</label><br>
-            <textarea name="request_details" rows="4" required placeholder="Enter your request details here..."></textarea><br><br>
+ </head>
+ <body>
+    <h1>Welcome {{ username }}!</h1>
+    <h4>Student ID: {{ student_id }}</h4>
+    <p>Building: {{ building}} </p>
+    <p>Mounth: {{ mounth}} </p>
+    <p>Current Balance: ${{ balance }} </p>
+    <p>Required Balance: ${{ threshold}} </p>
 
-            <button type="submit">Submit Request</button>
-        </form>
-        <p>If you'd like to go back, <a href="{{ url_for('student_action', username=username) }}">return to your actions</a>.</p>
+    {% if eligible %} 
+        <div class="status-message eligible">
+            You are eligible to request a meal/snack! 
+            </div>
+    {% else %}
+            <div class="status-message eligible">
+                You are not eligible to request at this time. 
+            </div>
+    {% endif %}
+
+    {% if eligible %}
+    {% if success_message %}
+        <div class="status-message eligible">
+            {{ success_message}}
+        </div>
+
+    {% endif %} 
+
+
+    <p> If you'd like to go back, <a href="{{ url_for('student_action', username=username) }}">return to your action</a>.</p>
     </div>
+
 </body>
 </html>
+

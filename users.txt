@@ -98,3 +98,8 @@ kmorgan,KeWyc0gTf2
 aking,lXgulk9nUZ
 qdouglas,T3xPoo6uJL
 sjohnson,LI30N1rttccponti,wallflower05
+<<<<<<< Updated upstream
+=======
+king,http://127.0.0.1:5000
+cponti,wallflower05
+>>>>>>> Stashed changes

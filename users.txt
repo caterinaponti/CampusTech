@@ -99,3 +99,5 @@ aking,lXgulk9nUZ
 qdouglas,T3xPoo6uJL
 sjohnson,LI30N1rttccponti,wallflower05
 king,http://127.0.0.1:5000
+helloUser,thisisaFacePassword
+Tester!!!,HappyHappy

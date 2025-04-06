@@ -54,5 +54,3 @@ def student_action():
 
     if action not in ["donate", "request"]:
         return "Invalid action selected.", 400
-
-    return f"Thanks, {student_id}. You chose to {action.upper()} a meal!"

@@ -212,7 +212,7 @@ def request_page(username, student_id, balance, building):
 
         # Show success message
         success_message = f"✅ {username}, you’ve been added to the queue! You will be notified soon of your {request_type} status."
-
+        queue_position = get_queue_position(username)
 
         return render_template(
             'typage.html',
@@ -220,7 +220,8 @@ def request_page(username, student_id, balance, building):
             student_id=student_id,
             building=building,
             balance=current_balance,
-            eligible=needs_flexi
+            eligible=needs_flexi,
+            queue_position=queue_position
         )
     
 
@@ -235,15 +236,34 @@ def request_page(username, student_id, balance, building):
 
 
 
-@app.route('/request/<username>/<student_id>/<building>/<balance>/<eligible>/')
-def typage(username, student_id, building, balance, elugible):
-
+@app.route('/request/<username>/<student_id>/<building>/<balance>/<eligible>/<queue_position>')
+def typage(username, student_id, building, balance, elugible, queue_position):
+     
 
     return render_template('typage.html')
 
 @app.route('/welcome/<username>')
 def welcome(username):
     return render_template('welcome.html', username=username)
+
+
+def get_queue_position(username):
+    queue_file = 'queue.txt'
+    queue_position = None
+
+    try:
+        with open(queue_file, 'r') as f:
+            queue_lines = f.readlines()
+
+        # Count how many entries have the same username
+        queue_position = sum(1 for line in queue_lines if line.split(',')[0] == username) + 1
+
+    except FileNotFoundError:
+        queue_position = 1  # If the file doesn't exist, the first position is assumed
+
+    return queue_position
+
+
 
 # def send_email(username, subject, message_body):
 #     sender_email = "cponti@dons.usfca.edu"

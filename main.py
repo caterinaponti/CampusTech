@@ -80,7 +80,7 @@ def donation_failed():
 @app.route('/donation-success')
 def donation_success():
     balance = request.args.get('balance',type=float)
-    new_balance = float(balance) -  session['donation_total']
+    new_balance = float(balance) - session['donation_total']
     donation_total = request.args.get('donation_total', 0, type=int)
     meal_count = request.args.get('meal_count', 0, type=int)
     snack_count = request.args.get('snack_count', 0, type=int)
@@ -140,53 +140,28 @@ def donate(username, student_id, balance, building):
     return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)
  
 
-@app.route('/request/<username>/<student_id>/<balance>/<building>',methods=['GET', 'POST'])
+@app.route('/request/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
 def request_page(username, student_id, balance, building):
-    # check for the need of flexi 
-    Toler_balance = 3010
-    LME_balance = 2030
-
     Toler_balance_check = {
-        "January": Toler_balance,
-        "February": 2744,
-        "March":2060,
-        "April":1200,
-        "May":521,
-        "June":0,
-        "July":0,
-        "August":Toler_balance,
-        "September":2744,
-        "October": 2060,
-        "Novemeber":1200,
-        "December":521
+        "January": 3010, "February": 2744, "March": 2060,
+        "April": 1200, "May": 521, "June": 0, "July": 0,
+        "August": 3010, "September": 2744, "October": 2060,
+        "November": 1200, "December": 521
     }
 
     LME_balance_check = {
-        "January": LME_balance,
-        "February": 1776,
-        "March":1269,
-        "April":762,
-        "May":250,
-        "June":0,
-        "July":0,
-        "August":LME_balance,
-        "September":1776,
-        "October": 1269,
-        "Novemeber":762,
-        "December":250
+        "January": 2030, "February": 1776, "March": 1269,
+        "April": 762, "May": 250, "June": 0, "July": 0,
+        "August": 2030, "September": 1776, "October": 1269,
+        "November": 762, "December": 250
     }
 
-    # Get current month
     current_month = datetime.now().strftime("%B")
-
-    # Convert balance from string to float
     try:
         current_balance = float(balance)
     except ValueError:
         return f"Invalid balance format for student {student_id}."
 
-
-     # Determine threshold and check eligibility
     if building == "Toler":
         threshold = Toler_balance_check.get(current_month, 0)
     elif building == "LME":
@@ -194,26 +169,21 @@ def request_page(username, student_id, balance, building):
     else:
         return f"Unknown building: {building}"
 
-    # Check if student is eligible for request
     needs_flexi = current_balance < threshold
-    
-        #request meal/snack 
-
-    #create a queue
     queue_file = 'queue.txt'
-    success_message = None
+    bank_file = 'bank.txt'
+    error = None
 
     if request.method == 'POST' and needs_flexi:
         request_type = None
-        amount = None
-        success_message = None
+        request_amount = 0
 
         if 'meal' in request.form:
             request_type = 'meal'
-            amount = 25
+            request_amount = 25
         elif 'snack' in request.form:
             request_type = 'snack'
-            amount = 10
+            request_amount = 10
         else:
             error = "Please select an item to request."
             return render_template(
@@ -228,43 +198,120 @@ def request_page(username, student_id, balance, building):
                 error=error
             )
         
-        
-        # Write to bank.txt
-        with open('bank.txt', 'a') as f:
-            f.write(f"{amount}\n")
 
-        # Add user to queue.txt
-        with open('queue.txt', 'a') as f:
-            line = f"{username},{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
-            f.write(line)
 
-        # Show success message
-        success_message = f"✅ {username}, you’ve been added to the queue! You will be notified soon of your {request_type} status."
-        queue_position = get_queue_position(username)
+        # Log the request to the queue
+        with open(queue_file, 'a') as f:
+            f.write(f"{username},{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
 
-        return render_template(
-            'typage.html',
-            username=username,
-            student_id=student_id,
-            building=building,
-            balance=current_balance,
-            eligible=needs_flexi,
-            queue_position=queue_position,
-            amount=amount 
-        )
+
+        # Update the bank file
+        # updated_balance = current_balance - request_amount
+        # new_lines = []
+
+        # with open(bank_file, 'r') as f:
+        #     for line in f:
+        #         parts = line.strip().split(',')
+        #         if len(parts) >= 4 and parts[0] == username and parts[1] == student_id:
+        #             new_lines.append(f"{username},{student_id},{updated_balance},{building}\n")
+        #         else:
+        #             new_lines.append(line)
+
+        # with open(bank_file, 'w') as f:
+        #     f.writelines(new_lines)
+
+        # ✅ Compute queue position
+        # with open(queue_file, 'r') as f:
+        #     queue_lines = f.readlines()
+        #     position = next((i + 1 for i, line in enumerate(queue_lines) if line.startswith(username + ",")), None)
+        position = get_queue_position(username)
     
+        try:
+            # Read the balances.txt file to find the student entry
+            with open('balances.txt', 'r') as file:
+                lines = file.readlines()
 
-    return render_template(
-        'request.html',
-        username=username,
-        student_id=student_id,
-        building=building,
-        balance=current_balance,
-        eligible=needs_flexi
-    )
+            balance_updated = False
+            with open('balances.txt', 'w') as file:
+                for line in lines:
+                    # Split each line into student_id and balance
+                    parts = line.strip().split()
+                    current_student_id = parts[0]
+                    current_student_balance = float(parts[1])
+
+                    # If the student_id matches, update their balance
+                    if current_student_id == student_id:
+                        # Deduct the requested amount from the current balance
+                        new_balance = current_student_balance + request_amount
+                        balance_updated = True
+                        # Write the updated balance to the file
+                        file.write(f"{student_id} {new_balance:.2f} {building}\n")
+                    else:
+                        # Otherwise, write the line as is (for other students)
+                        file.write(line)
+        except FileNotFoundError:
+            return render_template('request.html', error="balances.txt file not found.")
+
+        new_balance=current_balance + request_amount
+
+        try:
+            with open(bank_file, 'r') as file:
+                lines = file.readlines()
+
+            balance_updated = False
+            with open(bank_file, 'w') as file:
+                for line in lines:
+                    line = line.strip()
+                    if line == str(request_amount) and not balance_updated:
+                        balance_updated = True
+                        continue  # Skip this line (remove one occurrence of the requested amount)
+                    file.write(line + "\n")
+        except FileNotFoundError:
+            return render_template('request.html', error="bank.txt file not found.")
+
+
+        return redirect(url_for('request_success',
+                                username=username,
+                                student_id=student_id,
+                                old_balance=current_balance,
+                                new_balance=new_balance,
+                                item=request_type,
+                                amount=request_amount,
+                                position=position))
+
+
+    return render_template('request.html',
+                           username=username,
+                           student_id=student_id,
+                           building=building,
+                           balance=current_balance,
+                           month=current_month,
+                           threshold=threshold,
+                           eligible=needs_flexi,
+                           error=error)
 
 
 #add changes in the student balance
+
+@app.route('/request-success')
+def request_success():
+    username = request.args.get('username')
+    student_id = request.args.get('student_id')
+    old_balance = float(request.args.get('old_balance'))
+    new_balance = float(request.args.get('new_balance'))
+    item = request.args.get('item')
+    amount = request.args.get('amount')
+    position = request.args.get('position')
+
+    return render_template('request_success.html',
+                           username=username,
+                           student_id=student_id,
+                           old_balance=old_balance,
+                           new_balance=new_balance,
+                           item=item,
+                           amount=amount,
+                           position=position)
+
 
 
 @app.route('/request/<username>/<student_id>/<building>/<balance>/<eligible>/<queue_position>/<amount>')

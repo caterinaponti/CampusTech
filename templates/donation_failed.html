@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name=""viewport" content="width=device-width, initial-scale=1.0">
-    <title> Donation Success !</title>
-    <style>
-         body {
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Donation Failure</title>
+        <style>
+              body {
              font-family: Arial, sans-serif;
              background-color: #f4f7fc;
              margin: 0;
@@ -26,7 +26,6 @@
              text-align: center;
              margin-bottom: 20px;
          }
-
          h2 {
              color: #4CAF50;
          }
@@ -64,15 +63,15 @@
              font-size: 0.9em;
              color: #555;
          }
-    </style>
-
-</head>
-<body>
-    <div class="container">
-        <h1>Congratulations! You've successfully donated! </h1>
-        <h2> You have donated a total of ${{donation_total}}</h2>
-        <h3> {{meal_count}} meal(s) and {{snack_count}} snack(s)</h3>
-        <p> Your previous balance was: ${{balance}} and your new balance is: ${{new_balance}}</p>
-    </div>
-</body>
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Donation has failed :(</h1>
+            <h3>You are not ellible to donate {{meal_count}} meal(s) and {{snack_count}} snack(s) : Amount ${{donation_total}}</h3>
+            <p> Your student balance is: ${{balance}}</p>
+            <p>If you'd like to go back, <a href="{{ url_for('student_action', username=username) }}">return to your actions</a></p>
+        </div>
+       
+    </body>
 </html>

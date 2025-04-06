@@ -80,7 +80,7 @@ def donation_failed():
 @app.route('/donation-success')
 def donation_success():
     balance = request.args.get('balance',type=float)
-    new_balance = float(balance) - session['donation_total']
+    new_balance = float(balance) -  session['donation_total']
     donation_total = request.args.get('donation_total', 0, type=int)
     meal_count = request.args.get('meal_count', 0, type=int)
     snack_count = request.args.get('snack_count', 0, type=int)
@@ -128,6 +128,7 @@ def donate(username, student_id, balance, building):
             else:
                 # valid donation amount 
                 session['donation_total'] += donation_amount
+<<<<<<< HEAD
                 # with open bank_file
 
 
@@ -135,9 +136,43 @@ def donate(username, student_id, balance, building):
 
                 
                 return redirect(url_for('donation_success',donation_total=session['donation_total'],meal_count=session['meal_count'], snack_count=session['snack_count'],balance=balance))
+=======
+                #create the students new updated balance and update it within balances.txt
+                new_balance = float(balance) -  session['donation_total'] #update the new balance
+                try:
+                    with open('balances.txt', 'r') as file:
+                        lines = file.readlines() # makes list of lines
+                        for i, line in enumerate(lines): # loop through lines
+                            parts = line.strip().split(' ')
+                            if parts[0] == student_id: # find matching student id
+                                parts[1] = str(new_balance)
+                                lines[i] = ' '.join(parts) + '\n' # puts back together the updated part (id) and the rest of info
+                                break
+                    with open('balances.txt', 'w') as file:
+                        file.writelines(lines)
+                except FileNotFoundError:
+                    error = "balances.txt file not found "
+                
+                # now write the result and added amount 
+                try:
+                    with open('bank.txt', 'r') as file: # write the previous lines from file 
+                        lines = file.readlines()
+                    # then added newly added entries
+                    file = open("bank.txt", "w")
+                    file.writelines(lines)
+                    for i in range(session['meal_count']):
+                        file.write("25" + "\n")
+                    for i in range(session['snack_count']):
+                        file.write("10" + "\n")
+                        
+                except FileNotFound:
+                    error = "bank.txt file not found"
+                return redirect(url_for('donation_success',donation_total=session['donation_total'],meal_count=session['meal_count'], snack_count=session['snack_count'],balance=balance, new_balance=new_balance))
+>>>>>>> c8c166010095bc2ed5e4301a7015a488c031fb4e
     
 
     return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)
+   
  
 
 @app.route('/request/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
@@ -173,6 +208,9 @@ def request_page(username, student_id, balance, building):
     queue_file = 'queue.txt'
     bank_file = 'bank.txt'
     error = None
+
+    queue_file = 'queue.txt'
+    success_message = None
 
     if request.method == 'POST' and needs_flexi:
         request_type = None

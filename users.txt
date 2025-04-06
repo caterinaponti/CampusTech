@@ -108,6 +108,7 @@ aacheikh,xyXpDmBcO1
 lrfiguerres,fdsfsd
 lrfiguerres,j
 fdsfd,ds
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 aacheikh,exkppIC4s1
@@ -148,21 +149,54 @@ lrfiguerres,dsadas
 boto,dick
 =======
 admin,password123
-<<<<<<< HEAD
-
+>>>>>>> dcc741cd67411e8a1289259ed1d767d707e6c3ce
+lrfiguerres,hgffghgf
+lrfiguerres,fdsf
+fdsfd,fdsfda
 lrfiguerres,fdsfsdf
-lrfiguerres,dfdsfsd
-fdsfd,fdsfsd
-lrfiguerres,fdfs
-lrfiguerres,nj
-lrfiguerres,km
-lrfiguerres,789
-lrfiguerres,dsfgsdgfd
-lrfiguerres,jghjghj
+lrfiguerres,2323
+jade,fdsfsd
+hey,123
+lrfiguerres,gfgdfgf
+fgdgfd,gfdgdf
+gfdgdf,21321
+2331234,432
+fdsfds,1231
+dfdsfd,12321
+lrfiguerres,rewrew
+fdsf,gfs
+=======
+<<<<<<< HEAD
+>>>>>>> 83da2fe56d208ffecb0f1e487c1340e056cc73c7
+fdsfd,rewrwer
+lrfiguerres,fdsfds
+lrfiguerres,3123
 =======
 aacheikh,8MHhrsPVr5
 jadehao,loveme
 >>>>>>> c0d0c89275c011f43436123d85689ed20bd04fbc
 aacheikh,3SNhCbYVJ8
 amy,cheetos05
+<<<<<<< HEAD
 aacheikh,KOSyv3P0YZ
+=======
+>>>>>>> 95f1ef802000e7dd2d474d9134ccf496a36b98b5
+lrfiguerres,dfdsf
+lrfiguerres,reert
+lrfiguerres,rewr
+lrfiguerres,erwerwer
+lrfiguerres,fdds
+lrfiguerres,yas
+lrfiguerres,dvssdvd
+lrfiguerres,gfdgdfgd
+lrfiguerres,4343
+lrfiguerres,rerew
+lrfiguerres,efw
+hey,efds
+lrfiguerres,fd
+lrfiguerres,ewqr
+thisislit,fdsfsd
+CHEEHEEEEE,GDSFJNGKDFGFDGFD
+lrfiguerres,njbn
+lrfiguerres,fdfs
+>>>>>>> 5fd2ceb404f7854c6a872bee330e82cafa2b9a67

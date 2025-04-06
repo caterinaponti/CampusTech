@@ -70,17 +70,16 @@ def student_action(username):
 @app.route('/donation-failed')
 def donation_failed():
     balance = request.args.get('balance',type=float)
-    new_balance = float(balance) -  session['donation_total']
     donation_total = request.args.get('donation_total', 0, type=int)
     meal_count = request.args.get('meal_count', 0, type=int)
     snack_count = request.args.get('snack_count', 0, type=int)
-    return render_template('donation_failed.html', donation_total=donation_total, balance=balance, new_balance=new_balance, meal_count=meal_count, snack_count=snack_count)
+    return render_template('donation_failed.html', donation_total=donation_total, balance=balance, meal_count=meal_count, snack_count=snack_count)
 
 
 @app.route('/donation-success')
 def donation_success():
     balance = request.args.get('balance',type=float)
-    new_balance = float(balance) -  session['donation_total']
+    new_balance = request.args.get('new_balance', type=float)
     donation_total = request.args.get('donation_total', 0, type=int)
     meal_count = request.args.get('meal_count', 0, type=int)
     snack_count = request.args.get('snack_count', 0, type=int)
@@ -119,22 +118,43 @@ def donate(username, student_id, balance, building):
         elif 'finish' in request.form:
             # check if user has enough first
             result = float(balance) - (session['donation_total'] + donation_amount)
-            if(result < 1): # user isn't eligible to donate the amount they want
+            # if user tried to donate above $50 and also was inelligible 
+            if result < 1 and session['donation_total'] + donation_amount > 50: # user isn't eligible to donate the amount they want
+                error = "You have insufficient funds and donation limit reached. You cannot donate more than $50. "     
+                return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building,error=error)
+            # if user simply didn't have enough
+            if result < 1:
                 return redirect(url_for('donation_failed', donation_total=session['donation_total'], meal_count=session['meal_count'],snack_count=session['snack_count'], balance=balance ))
-
+            # if user tried to donate more than $50 and was eligible 
             if session['donation_total'] + donation_amount > 50:
                 error = "Donation limit reached. You cannot donate more than $50."     
                 return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building,error=error)
             else:
                 # valid donation amount 
                 session['donation_total'] += donation_amount
-                # with open bank_file
+                #create the students new updated balance and update it within balances.txt
+                new_balance = float(balance) -  session['donation_total']
 
+                try:
+                    with open('balances.txt', 'r') as file:
+                        lines = file.readlines() # makes list of lines
+                        for i, line in enumerate(lines): # loop through lines
+                            parts = line.strip().split(' ')
+                            if parts[0] == student_id: # find matching student id
+                                parts[1] = str(new_balance)
+                                lines[i] = ' '.join(parts) + '\n' # puts back together the updated part (id) and the rest of info
+                                break
+                    with open('balances.txt', 'w') as file:
+                        file.writelines(lines)
+                except FileNotFoundError:
+                    error = "balances.txt file not found "
+                                
+                # with open bank_file
 
              #update the new balance
 
                 
-                return redirect(url_for('donation_success',donation_total=session['donation_total'],meal_count=session['meal_count'], snack_count=session['snack_count'],balance=balance))
+                return redirect(url_for('donation_success',donation_total=session['donation_total'],meal_count=session['meal_count'], snack_count=session['snack_count'],balance=balance, new_balance=new_balance))
     
 
     return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)

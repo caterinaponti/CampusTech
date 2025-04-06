@@ -1,6 +1,6 @@
 # CampusTech
 
-# 🧚‍♀️ Flexi Fairy: GET FED – DonsHack25
+# 🧚‍♀️ Be a Flexi Fairy (BFF) – DonsHack25
 
 Flexi Fairy is a Flask web application built to address **food insecurity on campus** by connecting students who have **excess flexi dollars** with those who **need meals or snacks**. 
 

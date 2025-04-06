@@ -240,6 +240,17 @@ def request_page(username, student_id, balance, building):
 def typage(username, student_id, building, balance, elugible, queue_position):
      
 
+    return render_template('update.html',
+        username=username,
+        student_id=student_id,
+        balance=balance
+    )
+
+
+@app.route('/request/<username>/<student_id>/<balance>')
+def typage(username, student_id, balance):
+     
+
     return render_template('update.html')
 
 @app.route('/welcome/<username>')

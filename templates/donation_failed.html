@@ -70,7 +70,7 @@
             <h1>Donation has failed :(</h1>
             <h3>You are not ellible to donate {{meal_count}} meal(s) and {{snack_count}} snack(s) : Amount ${{donation_total}}</h3>
             <p> Your student balance is: ${{balance}}</p>
-           
+            <p>If you'd like to go back, <a href="{{ url_for('student_action', username=username) }}">return to your actions</a></p>
         </div>
        
     </body>

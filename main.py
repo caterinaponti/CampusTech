@@ -203,9 +203,6 @@ def request_page(username, student_id, balance, building):
     queue_file = 'queue.txt'
     success_message = None
 
-    queue_file = 'queue.txt'
-    success_message = None
-
     if request.method == 'POST' and needs_flexi:
         request_type = None
         amount = None
@@ -230,6 +227,7 @@ def request_page(username, student_id, balance, building):
                 eligible=needs_flexi,
                 error=error
             )
+        
         
         # Write to bank.txt
         with open('bank.txt', 'a') as f:
@@ -271,19 +269,34 @@ def request_page(username, student_id, balance, building):
 
 @app.route('/request/<username>/<student_id>/<building>/<balance>/<eligible>/<queue_position>/<amount>')
 def typage(username, student_id, building, balance, eligible, queue_position, amount):
-    balance = int(balance)
+    balance = float(balance)  # Use float for balance values
     queue_position = int(queue_position)
     amount = int(amount)
 
-    # Read bank.txt entries
-    with open('bank.txt', 'r') as f:
-        bank_entries = [int(line.strip()) for line in f if line.strip()]
+    # Read balances.txt entries and update balance for the given student ID
+    with open('balances.txt', 'r') as f:
+        balance_entries = [line.strip() for line in f if line.strip()]
 
-     # Count how many requests before the current one have the same amount
-    # (i.e., competing for the same type of item: meal or snack)
+    # Modify the balance for the given student ID
+    updated_balance = None
+    updated_lines = []
+    for entry in balance_entries:
+        student_data = entry.split()
+        if student_data[0] == student_id:
+            # Update balance for this student ID
+            student_data[1] = str(balance + amount)
+            updated_balance = balance + amount
+        updated_lines.append(' '.join(student_data))
+
+    # Write the updated balance entries back to the file
+    with open('balances.txt', 'w') as f:
+        for line in updated_lines:
+            f.write(line + '\n')
+
+    # Count how many requests before the current one have the same amount
     with open('queue.txt', 'r') as f:
         queue_lines = [line.strip() for line in f if line.strip()]
-   
+
     # Get only those before this user in the queue
     prior_requests = queue_lines[:queue_position]
 
@@ -291,31 +304,38 @@ def typage(username, student_id, building, balance, eligible, queue_position, am
     prior_same_amount = 0
     for line in prior_requests:
         user, timestamp = line.split(',', 1)
-        # To make this simple, assume amount info is embedded somehow
-        # If not, this won't work unless you have a second file that tracks request type
-        # For now, we'll assume all users want the same amount
         prior_same_amount += 1
 
-    # Count available items of this amount in the bank
-    available_same_amount = bank_entries.count(amount)
+    # Debugging: Check how many prior requests were the same amount
+    print(f"Prior same amount count: {prior_same_amount}")
 
+    # Now let's check how many of the available items in the bank match the requested amount
+    with open('bank.txt', 'r') as f:
+        bank_entries = [line.strip() for line in f if line.strip()]
+
+    available_same_amount = sum(1 for line in bank_entries if int(line.split()[1]) == amount)
+
+    # Debugging: Check available items
+    print(f"Available same amount count in bank: {available_same_amount}")
+
+    # Check if the request can be fulfilled
     if prior_same_amount < available_same_amount:
         # Request can be fulfilled!
-        balance += amount
         status = f"✅ Your request for ${amount} has been fulfilled!"
     else:
         # Request not available yet
         status = f"⏳ Your request for ${amount} is still pending. Please wait."
 
-    # Update the session or the database if needed
-    # Here we assume you're working with the session for simplicity
-    session['balance'] = balance  # Update the session with the new balance
+    # Debugging: Output the status of the request
+    print(status)
 
+    # Return the updated page with balance and status
     return render_template('update.html',
         username=username,
         student_id=student_id,
         building=building,
-        balance=balance
+        balance=updated_balance,
+        status=status
     )
 
 

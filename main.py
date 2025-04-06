@@ -234,7 +234,7 @@ def request_page(username, student_id, balance, building):
 
         # Show success message
         success_message = f"✅ {username}, you’ve been added to the queue! You will be notified soon of your {request_type} status."
-
+        queue_position = get_queue_position(username)
 
         return render_template(
             'typage.html',
@@ -242,7 +242,9 @@ def request_page(username, student_id, balance, building):
             student_id=student_id,
             building=building,
             balance=current_balance,
-            eligible=needs_flexi
+            eligible=needs_flexi,
+            queue_position=queue_position,
+            amount=amount 
         )
     
 
@@ -257,15 +259,92 @@ def request_page(username, student_id, balance, building):
 
 
 
-@app.route('/request/<username>/<student_id>/<building>/<balance>/<eligible>/')
-def typage(username, student_id, building, balance, elugible):
+@app.route('/request/<username>/<student_id>/<building>/<balance>/<eligible>/<queue_position>/<amount>')
+def typage(username, student_id, building, balance, eligible, queue_position, amount):
+    balance = int(balance)
+    queue_position = int(queue_position)
+    amount = int(amount)
+
+    # Read bank.txt entries
+    with open('bank.txt', 'r') as f:
+        bank_entries = [int(line.strip()) for line in f if line.strip()]
+
+     # Count how many requests before the current one have the same amount
+    # (i.e., competing for the same type of item: meal or snack)
+    with open('queue.txt', 'r') as f:
+        queue_lines = [line.strip() for line in f if line.strip()]
+   
+    # Get only those before this user in the queue
+    prior_requests = queue_lines[:queue_position]
+
+    # Count how many of them requested the same amount
+    prior_same_amount = 0
+    for line in prior_requests:
+        user, timestamp = line.split(',', 1)
+        # To make this simple, assume amount info is embedded somehow
+        # If not, this won't work unless you have a second file that tracks request type
+        # For now, we'll assume all users want the same amount
+        prior_same_amount += 1
+
+    # Count available items of this amount in the bank
+    available_same_amount = bank_entries.count(amount)
+
+    if prior_same_amount < available_same_amount:
+        # Request can be fulfilled!
+        balance += amount
+        status = f"✅ Your request for ${amount} has been fulfilled!"
+    else:
+        # Request not available yet
+        status = f"⏳ Your request for ${amount} is still pending. Please wait."
+
+    return render_template('update.html',
+        username=username,
+        student_id=student_id,
+        building=building,
+        balance=balance
+    )
 
 
-    return render_template('typage.html')
+@app.route('/update/<username>/<student_id>/<building>/<balance>')
+def update(username, student_id, building, balance):
+     
+
+    return render_template('update.html',
+                           username=username, 
+                           student_id=student_id, 
+                           building=building, 
+                           balance=balance)
 
 @app.route('/welcome/<username>')
 def welcome(username):
     return render_template('welcome.html', username=username)
+
+
+def get_queue_position(username):
+    queue_file = 'queue.txt'
+    queue_position = None
+
+    try:
+        with open(queue_file, 'r') as f:
+            queue_lines = f.readlines()
+
+        # Loop through the queue lines and find the first occurrence of the username
+        for position, line in enumerate(queue_lines, start=1):
+            user, timestamp = line.strip().split(',')
+            if user == username:
+                queue_position = position
+                break  # Once we find the username, we break out of the loop
+
+        if queue_position is None:
+            # If the username is not in the queue, assume they're in the first position
+            queue_position = len(queue_lines) + 1
+
+    except FileNotFoundError:
+        queue_position = 1  # If the file doesn't exist, assume the first position
+
+    return queue_position
+
+
 
 # def send_email(username, subject, message_body):
 #     sender_email = "cponti@dons.usfca.edu"

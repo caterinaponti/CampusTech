@@ -255,11 +255,19 @@ def get_queue_position(username):
         with open(queue_file, 'r') as f:
             queue_lines = f.readlines()
 
-        # Count how many entries have the same username
-        queue_position = sum(1 for line in queue_lines if line.split(',')[0] == username) + 1
+        # Loop through the queue lines and find the first occurrence of the username
+        for position, line in enumerate(queue_lines, start=1):
+            user, timestamp = line.strip().split(',')
+            if user == username:
+                queue_position = position
+                break  # Once we find the username, we break out of the loop
+
+        if queue_position is None:
+            # If the username is not in the queue, assume they're in the first position
+            queue_position = len(queue_lines) + 1
 
     except FileNotFoundError:
-        queue_position = 1  # If the file doesn't exist, the first position is assumed
+        queue_position = 1  # If the file doesn't exist, assume the first position
 
     return queue_position
 

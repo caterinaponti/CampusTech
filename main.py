@@ -70,13 +70,16 @@ def student_action(username):
 
 @app.route('/donation-success')
 def donation_success():
+    balance = request.args.get('balance',type=float)
+    new_balance = float(balance) -  session['donation_total']
     donation_total = request.args.get('donation_total', 0, type=int)
     meal_count = request.args.get('meal_count', 0, type=int)
     snack_count = request.args.get('snack_count', 0, type=int)
-    return render_template('donation_success.html', donation_total=donation_total)
+    return render_template('donation_success.html', donation_total=donation_total, balance=balance, new_balance=new_balance, meal_count=meal_count, snack_count=snack_count)
 
 @app.route('/donate/<username>/<student_id>/<balance>/<building>', methods=['GET', 'POST'])
 def donate(username, student_id, balance, building):
+    print("BALANCE " + balance)
     if 'donation_total' not in session:
         session['donation_total'] = 0
     # might need snack and meal counts but idk
@@ -101,18 +104,23 @@ def donate(username, student_id, balance, building):
                 error = "Donation limit reached. You cannot donate more than $50."  
         elif 'reset' in request.form:
             session['donation_total'] = 0
+            session['meal_count'] = 0
+            session['snack_count'] = 0
 
         elif 'finish' in request.form:
             if session['donation_total'] + donation_amount >= 50:
                 error = "Donation limit reached. You cannot donate more than $50."     
                 return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building,error=error)
             else:
+                # valid donation amount 
                 session['donation_total'] += donation_amount
+                # with open bank_file
+
 
              #update the new balance
 
-                new_balance = float(balance) -  session['donation_total']
-                return redirect(url_for('donation_success', donation_amount=donation_amount))
+                
+                return redirect(url_for('donation_success',donation_total=session['donation_total'],meal_count=session['meal_count'], snack_count=session['snack_count'],balance=balance))
     
 
     return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)

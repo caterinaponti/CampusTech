@@ -442,6 +442,7 @@ def get_queue_position(username):
     queue_file = 'queue.txt'
     queue_position = None
     #hello
+    #hii
 
     try:
         with open(queue_file, 'r') as f:

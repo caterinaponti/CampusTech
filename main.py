@@ -215,15 +215,12 @@ def request_page(username, student_id, balance, building):
 
 
         return render_template(
-            'request.html',
+            'typage.html',
             username=username,
             student_id=student_id,
             building=building,
             balance=current_balance,
-            month=current_month,
-            threshold=threshold,
-            eligible=needs_flexi,
-            success_message=success_message
+            eligible=needs_flexi
         )
     
 
@@ -233,42 +230,47 @@ def request_page(username, student_id, balance, building):
         student_id=student_id,
         building=building,
         balance=current_balance,
-        month=current_month,
-        threshold=threshold,
         eligible=needs_flexi
     )
 
+
+
+@app.route('/request/<username>/<student_id>/<building>/<balance>/<eligible>/')
+def typage(username, student_id, building, balance, elugible):
+
+
+    return render_template('typage.html')
 
 @app.route('/welcome/<username>')
 def welcome(username):
     return render_template('welcome.html', username=username)
 
-def send_email(username, subject, message_body):
-    sender_email = "cponti@dons.usfca.edu"
-    sender_password = "your_app_password"  # Use app password, not your real password
-    recipient_email = f"{username}@dons.usfca.edu"
+# def send_email(username, subject, message_body):
+#     sender_email = "cponti@dons.usfca.edu"
+#     sender_password = "your_app_password"  # Use app password, not your real password
+#     recipient_email = f"{username}@dons.usfca.edu"
 
-    msg = MIMEMultipart()
-    msg['From'] = sender_email
-    msg['To'] = recipient_email
-    msg['Subject'] = subject
+#     msg = MIMEMultipart()
+#     msg['From'] = sender_email
+#     msg['To'] = recipient_email
+#     msg['Subject'] = subject
 
-    msg.attach(MIMEText(message_body, 'plain'))
+#     msg.attach(MIMEText(message_body, 'plain'))
 
-    try:
-        # Connect to Gmail SMTP server
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(sender_email, sender_password)
+#     try:
+#         # Connect to Gmail SMTP server
+#         server = smtplib.SMTP('smtp.gmail.com', 587)
+#         server.starttls()
+#         server.login(sender_email, sender_password)
 
-        # Send the email
-        server.sendmail(sender_email, recipient_email, msg.as_string())
-        server.quit()
-        print("Email sent successfully to", recipient_email)
-        return True
-    except Exception as e:
-        print("Failed to send email:", e)
-        return False
+#         # Send the email
+#         server.sendmail(sender_email, recipient_email, msg.as_string())
+#         server.quit()
+#         print("Email sent successfully to", recipient_email)
+#         return True
+#     except Exception as e:
+#         print("Failed to send email:", e)
+#         return False
 
 if __name__ == '__main__':
     app.run(debug=True)

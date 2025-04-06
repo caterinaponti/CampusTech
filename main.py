@@ -3,7 +3,7 @@ from datetime import datetime
 
 import secrets
 
-
+#commits 
 app = Flask(__name__)
 app.secret_key = '0ad399ba1c7e106f462428c079682c9c'
 
@@ -116,6 +116,7 @@ def donate(username, student_id, balance, building):
             session['meal_count'] = 0
             session['snack_count'] = 0
 
+        
         elif 'finish' in request.form:
             # check if user has enough first
             result = float(balance) - (session['donation_total'] + donation_amount)
@@ -128,7 +129,7 @@ def donate(username, student_id, balance, building):
             else:
                 # valid donation amount 
                 session['donation_total'] += donation_amount
-<<<<<<< HEAD
+
                 # with open bank_file
 
 
@@ -136,7 +137,7 @@ def donate(username, student_id, balance, building):
 
                 
                 return redirect(url_for('donation_success',donation_total=session['donation_total'],meal_count=session['meal_count'], snack_count=session['snack_count'],balance=balance))
-=======
+
                 #create the students new updated balance and update it within balances.txt
                 new_balance = float(balance) -  session['donation_total'] #update the new balance
                 try:
@@ -168,7 +169,7 @@ def donate(username, student_id, balance, building):
                 except FileNotFound:
                     error = "bank.txt file not found"
                 return redirect(url_for('donation_success',donation_total=session['donation_total'],meal_count=session['meal_count'], snack_count=session['snack_count'],balance=balance, new_balance=new_balance))
->>>>>>> c8c166010095bc2ed5e4301a7015a488c031fb4e
+
     
 
     return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)

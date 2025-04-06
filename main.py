@@ -138,6 +138,7 @@ def donate(username, student_id, balance, building):
     
 
     return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)
+   
  
 
 @app.route('/request/<username>/<student_id>/<balance>/<building>',methods=['GET', 'POST'])

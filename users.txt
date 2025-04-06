@@ -148,18 +148,19 @@ lrfiguerres,dsadas
 boto,dick
 =======
 admin,password123
-<<<<<<< HEAD
-
+>>>>>>> dcc741cd67411e8a1289259ed1d767d707e6c3ce
+lrfiguerres,hgffghgf
+lrfiguerres,fdsf
+fdsfd,fdsfda
 lrfiguerres,fdsfsdf
-lrfiguerres,dfdsfsd
-fdsfd,fdsfsd
-lrfiguerres,fdfs
-lrfiguerres,nj
-lrfiguerres,km
-lrfiguerres,789
-lrfiguerres,dsfgsdgfd
-lrfiguerres,jghjghj
-=======
-aacheikh,8MHhrsPVr5
-jadehao,loveme
->>>>>>> c0d0c89275c011f43436123d85689ed20bd04fbc
+lrfiguerres,2323
+jade,fdsfsd
+hey,123
+lrfiguerres,gfgdfgf
+fgdgfd,gfdgdf
+gfdgdf,21321
+2331234,432
+fdsfds,1231
+dfdsfd,12321
+lrfiguerres,rewrew
+fdsf,gfs

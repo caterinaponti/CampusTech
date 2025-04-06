@@ -158,6 +158,7 @@ def donate(username, student_id, balance, building):
     
 
     return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)
+   
  
 
 @app.route('/request/<username>/<student_id>/<balance>/<building>',methods=['GET', 'POST'])
@@ -217,6 +218,15 @@ def request_page(username, student_id, balance, building):
     # Check if student is eligible for request
     needs_flexi = current_balance < threshold
 
+    
+        #request meal/snack 
+
+    #create a queue
+    queue_file = 'queue.txt'
+    success_message = None
+
+    queue_file = 'queue.txt'
+    success_message = None
 
     if request.method == 'POST' and needs_flexi:
         request_type = None

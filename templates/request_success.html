@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request Submitted</title>
     <style>
         body {
@@ -21,7 +20,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 100%;
-            max-width: 400px;
+            max-width: 500px;
             text-align: center;
         }
         h2 {
@@ -29,34 +28,33 @@
         }
         p {
             font-size: 1em;
+            margin: 10px 0;
             color: #333;
-            margin-bottom: 20px;
-        }
-        .queue-position {
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 20px;
         }
         a {
             display: inline-block;
             margin-top: 20px;
             text-decoration: none;
-            color: #4CAF50;
-            font-weight: bold;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
         }
         a:hover {
-            text-decoration: underline;
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Thank you for your request!</h2>
-        <p>You have been added to the processing queue.</p>
-        <p class="queue-position">You are currently #{{ queue_position }} in line.</p>
-        <p>You will be notified once your request is processed and your student balance is updated.</p>
-        <a href="{{ url_for('update', username=username, student_id=student_id, building=building, balance=balance) }}">Click Here to check your balance</a>
-        <a href="{{ url_for('student_action', username=username) }}">Return to your actions</a>
- </div>
+        <h2>✅ Thank You for Your Request!</h2>
+        <p>You have been added to the queue for a <strong>${{ amount }}</strong> <strong>{{ request_type }}</strong>.</p>
+        <p>Your current position in the queue is: <strong>#{{ position }}</strong></p>
+        <p>We will notify you when your request is processed and your student balance is updated.</p>
+        <p>Old Balance: ${{ old_balance }}</p>
+        <p>New Balance: ${{ new_balance }}</p>
+        <a href="{{ url_for('student_action', username=username) }}">Click here to return to your action page</a>
+    </div>
 </body>
 </html>
+

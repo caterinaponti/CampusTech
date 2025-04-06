@@ -6,7 +6,7 @@
     <title> Donation Success !</title>
     <style>
          body {
-             font-family: Arial, sans-serif;
+             font-family: Optima;
              background-color: #f4f7fc;
              margin: 0;
              padding: 0;
@@ -22,7 +22,7 @@
              border-radius: 8px;
              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
              width: 100%;
-             max-width: 400px;
+             max-width: 800px;
              text-align: center;
              margin-bottom: 20px;
          }
@@ -74,6 +74,7 @@
         <h2> You have donated a total of ${{donation_total}}</h2>
         <h3> {{meal_count}} meal(s) and {{snack_count}} snack(s)</h3>
         <p> Your previous balance was: ${{balance}} and your new balance is: ${{new_balance}}</p>
+        <img src="{{ url_for('static', filename='Thanks_You.png')}}" alt="Pic" width="400" height="400" style="border: 5px solid green;" >
     </div>
 </body>
 </html>

@@ -178,7 +178,11 @@ def request_page(username, student_id, balance, building):
     needs_flexi = current_balance < threshold
 
     
-    #request meal/snack 
+        #request meal/snack 
+
+    #create a queue
+    queue_file = 'queue.txt'
+    success_message = None
 
     queue_file = 'queue.txt'
     success_message = None

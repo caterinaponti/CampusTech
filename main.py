@@ -67,6 +67,15 @@ def student_action(username):
             return redirect(url_for('request_page', username=username, student_id=student_id, balance=balance, building=building))
 
     return render_template('student_action.html', username=username)
+@app.route('/donation-failed')
+def donation_failed():
+    balance = request.args.get('balance',type=float)
+    new_balance = float(balance) -  session['donation_total']
+    donation_total = request.args.get('donation_total', 0, type=int)
+    meal_count = request.args.get('meal_count', 0, type=int)
+    snack_count = request.args.get('snack_count', 0, type=int)
+    return render_template('donation_failed.html', donation_total=donation_total, balance=balance, new_balance=new_balance, meal_count=meal_count, snack_count=snack_count)
+
 
 @app.route('/donation-success')
 def donation_success():
@@ -108,7 +117,12 @@ def donate(username, student_id, balance, building):
             session['snack_count'] = 0
 
         elif 'finish' in request.form:
-            if session['donation_total'] + donation_amount >= 50:
+            # check if user has enough first
+            result = float(balance) - (session['donation_total'] + donation_amount)
+            if(result < 1): # user isn't eligible to donate the amount they want
+                return redirect(url_for('donation_failed', donation_total=session['donation_total'], meal_count=session['meal_count'],snack_count=session['snack_count'], balance=balance ))
+
+            if session['donation_total'] + donation_amount > 50:
                 error = "Donation limit reached. You cannot donate more than $50."     
                 return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building,error=error)
             else:
@@ -126,7 +140,7 @@ def donate(username, student_id, balance, building):
     return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)
  
 
-@app.route('/request/<username>/<student_id>/<balance>/<building>')
+@app.route('/request/<username>/<student_id>/<balance>/<building>',methods=['GET', 'POST'])
 def request_page(username, student_id, balance, building):
     # check for the need of flexi 
     Toler_balance = 3010
@@ -183,25 +197,54 @@ def request_page(username, student_id, balance, building):
     # Check if student is eligible for request
     needs_flexi = current_balance < threshold
 
-    
-        #request meal/snack 
-
-    #create a queue
-    queue_file = 'queue.txt'
-    success_message = None
-
-    queue_file = 'queue.txt'
-    success_message = None
 
     if request.method == 'POST' and needs_flexi:
-        with open(queue_file, 'a') as f:
+        request_type = None
+        amount = None
+        success_message = None
+
+        if 'meal' in request.form:
+            request_type = 'meal'
+            amount = 25
+        elif 'snack' in request.form:
+            request_type = 'snack'
+            amount = 10
+        else:
+            error = "Please select an item to request."
+            return render_template(
+                'request.html',
+                username=username,
+                student_id=student_id,
+                building=building,
+                balance=current_balance,
+                month=current_month,
+                threshold=threshold,
+                eligible=needs_flexi,
+                error=error
+            )
+        
+        # Write to bank.txt
+        with open('bank.txt', 'a') as f:
+            f.write(f"{amount}\n")
+
+        # Add user to queue.txt
+        with open('queue.txt', 'a') as f:
             line = f"{username},{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
             f.write(line)
-        success_message = f"✅ {username}, you’ve been added to the queue! You will be notified soon of your meal/snack status."
 
-    # TODO: give the meal or waiting
+        # Show success message
+        success_message = f"✅ {username}, you’ve been added to the queue! You will be notified soon of your {request_type} status."
 
-    # TODO: add a counter (max 3 requests per 7 days)
+
+        return render_template(
+            'typage.html',
+            username=username,
+            student_id=student_id,
+            building=building,
+            balance=current_balance,
+            eligible=needs_flexi
+        )
+    
 
     return render_template(
         'request.html',
@@ -209,43 +252,47 @@ def request_page(username, student_id, balance, building):
         student_id=student_id,
         building=building,
         balance=current_balance,
-        month=current_month,
-        threshold=threshold,
-        eligible=needs_flexi,
-        success_message=success_message  # <- don't forget this!
+        eligible=needs_flexi
     )
 
+
+
+@app.route('/request/<username>/<student_id>/<building>/<balance>/<eligible>/')
+def typage(username, student_id, building, balance, elugible):
+
+
+    return render_template('typage.html')
 
 @app.route('/welcome/<username>')
 def welcome(username):
     return render_template('welcome.html', username=username)
 
-def send_email(username, subject, message_body):
-    sender_email = "cponti@dons.usfca.edu"
-    sender_password = "your_app_password"  # Use app password, not your real password
-    recipient_email = f"{username}@dons.usfca.edu"
+# def send_email(username, subject, message_body):
+#     sender_email = "cponti@dons.usfca.edu"
+#     sender_password = "your_app_password"  # Use app password, not your real password
+#     recipient_email = f"{username}@dons.usfca.edu"
 
-    msg = MIMEMultipart()
-    msg['From'] = sender_email
-    msg['To'] = recipient_email
-    msg['Subject'] = subject
+#     msg = MIMEMultipart()
+#     msg['From'] = sender_email
+#     msg['To'] = recipient_email
+#     msg['Subject'] = subject
 
-    msg.attach(MIMEText(message_body, 'plain'))
+#     msg.attach(MIMEText(message_body, 'plain'))
 
-    try:
-        # Connect to Gmail SMTP server
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(sender_email, sender_password)
+#     try:
+#         # Connect to Gmail SMTP server
+#         server = smtplib.SMTP('smtp.gmail.com', 587)
+#         server.starttls()
+#         server.login(sender_email, sender_password)
 
-        # Send the email
-        server.sendmail(sender_email, recipient_email, msg.as_string())
-        server.quit()
-        print("Email sent successfully to", recipient_email)
-        return True
-    except Exception as e:
-        print("Failed to send email:", e)
-        return False
+#         # Send the email
+#         server.sendmail(sender_email, recipient_email, msg.as_string())
+#         server.quit()
+#         print("Email sent successfully to", recipient_email)
+#         return True
+#     except Exception as e:
+#         print("Failed to send email:", e)
+#         return False
 
 if __name__ == '__main__':
     app.run(debug=True)

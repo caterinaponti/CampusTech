@@ -55,10 +55,11 @@ Built during **DonsHack25**, this project empowers the USF community to give and
 - Confirmation via email.
 
 ### Page 4: Donate a Meal/Snack
-- Check student balance.
 - Select Snack ($10) or Meal ($25) – max $50/day.
+- Students press a button however many times they'd like to donate
+- Checks if student is eligible to donate (if student has enough to donate the amount accumulated) before processing
 - Balance updates and donor receives thank-you message.
-- Cute message: “You donated one meal and one snack, congrats!”
+- If student is ineligible they're informed & get the chance to go back and re-enter a different amount
 
 ### Page 5: Final Pages
 - Success: Confetti, GIFs, and message of appreciation.

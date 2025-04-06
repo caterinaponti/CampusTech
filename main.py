@@ -307,6 +307,10 @@ def typage(username, student_id, building, balance, eligible, queue_position, am
         # Request not available yet
         status = f"⏳ Your request for ${amount} is still pending. Please wait."
 
+    # Update the session or the database if needed
+    # Here we assume you're working with the session for simplicity
+    session['balance'] = balance  # Update the session with the new balance
+
     return render_template('update.html',
         username=username,
         student_id=student_id,

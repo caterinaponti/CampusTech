@@ -118,7 +118,7 @@ def donate(username, student_id, balance, building):
     return render_template('donate.html', username=username, student_id=student_id, balance=balance,building=building)
  
 
-@app.route('/request/<username>/<student_id>/<balance>/<building>')
+@app.route('/request/<username>/<student_id>/<balance>/<building>',methods=['GET', 'POST'])
 def request_page(username, student_id, balance, building):
     # check for the need of flexi 
     Toler_balance = 3010
@@ -175,25 +175,57 @@ def request_page(username, student_id, balance, building):
     # Check if student is eligible for request
     needs_flexi = current_balance < threshold
 
-    
-        #request meal/snack 
-
-    #create a queue
-    queue_file = 'queue.txt'
-    success_message = None
-
-    queue_file = 'queue.txt'
-    success_message = None
 
     if request.method == 'POST' and needs_flexi:
-        with open(queue_file, 'a') as f:
+        request_type = None
+        amount = None
+        success_message = None
+
+        if 'meal' in request.form:
+            request_type = 'meal'
+            amount = 25
+        elif 'snack' in request.form:
+            request_type = 'snack'
+            amount = 10
+        else:
+            error = "Please select an item to request."
+            return render_template(
+                'request.html',
+                username=username,
+                student_id=student_id,
+                building=building,
+                balance=current_balance,
+                month=current_month,
+                threshold=threshold,
+                eligible=needs_flexi,
+                error=error
+            )
+        
+        # Write to bank.txt
+        with open('bank.txt', 'a') as f:
+            f.write(f"{amount}\n")
+
+        # Add user to queue.txt
+        with open('queue.txt', 'a') as f:
             line = f"{username},{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
             f.write(line)
-        success_message = f"✅ {username}, you’ve been added to the queue! You will be notified soon of your meal/snack status."
 
-    # TODO: give the meal or waiting
+        # Show success message
+        success_message = f"✅ {username}, you’ve been added to the queue! You will be notified soon of your {request_type} status."
 
-    # TODO: add a counter (max 3 requests per 7 days)
+
+        return render_template(
+            'request.html',
+            username=username,
+            student_id=student_id,
+            building=building,
+            balance=current_balance,
+            month=current_month,
+            threshold=threshold,
+            eligible=needs_flexi,
+            success_message=success_message
+        )
+    
 
     return render_template(
         'request.html',
@@ -203,8 +235,7 @@ def request_page(username, student_id, balance, building):
         balance=current_balance,
         month=current_month,
         threshold=threshold,
-        eligible=needs_flexi,
-        success_message=success_message  # <- don't forget this!
+        eligible=needs_flexi
     )
 
 

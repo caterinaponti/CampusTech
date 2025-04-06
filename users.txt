@@ -148,6 +148,7 @@ lrfiguerres,dsadas
 boto,dick
 =======
 admin,password123
+<<<<<<< HEAD
 
 lrfiguerres,fdsfsdf
 lrfiguerres,dfdsfsd
@@ -158,3 +159,7 @@ lrfiguerres,km
 lrfiguerres,789
 lrfiguerres,dsfgsdgfd
 lrfiguerres,jghjghj
+=======
+aacheikh,8MHhrsPVr5
+jadehao,loveme
+>>>>>>> c0d0c89275c011f43436123d85689ed20bd04fbc

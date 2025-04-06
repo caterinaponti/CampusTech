@@ -15,9 +15,6 @@ Built during **DonsHack25**, this project empowers the USF community to give and
   - Donate up to **$50/day** in flexi dollars.
   - Request meals/snacks on a **first-come, first-served** basis.
   - Priority Queue system for requests.
-- **Eligibility Checks:**
-  - Real-time balance check to determine eligibility.
-  - Weekly limits: **Max 3 requests/week**, resets Sundays at 12am.
 - **Meal Tracking:**
   - $10 = Snack
   - $25 = Meal

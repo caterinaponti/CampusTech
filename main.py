@@ -133,8 +133,7 @@ def donate(username, student_id, balance, building):
                 # valid donation amount 
                 session['donation_total'] += donation_amount
                 #create the students new updated balance and update it within balances.txt
-                new_balance = float(balance) -  session['donation_total']
-
+                new_balance = float(balance) -  session['donation_total'] #update the new balance
                 try:
                     with open('balances.txt', 'r') as file:
                         lines = file.readlines() # makes list of lines
@@ -148,12 +147,21 @@ def donate(username, student_id, balance, building):
                         file.writelines(lines)
                 except FileNotFoundError:
                     error = "balances.txt file not found "
-                                
-                # with open bank_file
-
-             #update the new balance
-
                 
+                # now write the result and added amount 
+                try:
+                    with open('bank.txt', 'r') as file: # write the previous lines from file 
+                        lines = file.readlines()
+                    # then added newly added entries
+                    file = open("bank.txt", "w")
+                    file.writelines(lines)
+                    for i in range(session['meal_count']):
+                        file.write("25" + "\n")
+                    for i in range(session['snack_count']):
+                        file.write("10" + "\n")
+                        
+                except FileNotFound:
+                    error = "bank.txt file not found"
                 return redirect(url_for('donation_success',donation_total=session['donation_total'],meal_count=session['meal_count'], snack_count=session['snack_count'],balance=balance, new_balance=new_balance))
     
 

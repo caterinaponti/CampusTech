@@ -166,7 +166,23 @@ dfdsfd,12321
 lrfiguerres,rewrew
 fdsf,gfs
 =======
+<<<<<<< HEAD
 >>>>>>> 83da2fe56d208ffecb0f1e487c1340e056cc73c7
 fdsfd,rewrwer
 lrfiguerres,fdsfds
 lrfiguerres,3123
+=======
+aacheikh,8MHhrsPVr5
+jadehao,loveme
+>>>>>>> c0d0c89275c011f43436123d85689ed20bd04fbc
+aacheikh,3SNhCbYVJ8
+amy,cheetos05
+>>>>>>> 95f1ef802000e7dd2d474d9134ccf496a36b98b5
+lrfiguerres,dfdsf
+lrfiguerres,reert
+lrfiguerres,rewr
+lrfiguerres,erwerwer
+lrfiguerres,fdds
+lrfiguerres,yas
+lrfiguerres,dvssdvd
+lrfiguerres,gfdgdfgd

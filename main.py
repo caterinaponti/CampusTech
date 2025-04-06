@@ -258,6 +258,8 @@ def request_page(username, student_id, balance, building):
     )
 
 
+#add changes in the student balance
+
 
 @app.route('/request/<username>/<student_id>/<building>/<balance>/<eligible>/<queue_position>/<amount>')
 def typage(username, student_id, building, balance, eligible, queue_position, amount):

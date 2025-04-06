@@ -330,13 +330,11 @@ def typage(username, student_id, building, balance, eligible, queue_position, am
     print(status)
 
     # Return the updated page with balance and status
-    return render_template('update.html',
-        username=username,
-        student_id=student_id,
-        building=building,
-        balance=updated_balance,
-        status=status
-    )
+    return redirect(url_for('update',
+                        username=username,
+                        student_id=student_id,
+                        building=building,
+                        balance=updated_balance))
 
 
 @app.route('/update/<username>/<student_id>/<building>/<balance>')
